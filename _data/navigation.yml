@@ -1,9 +1,17 @@
 main:
-  - title: "Posts"
-    url: /posts/
-  - title: "Categories"
-    url: /categories/
-  - title: "Tags"
-    url: /tags/
+  - title: "Statistics"
+    url: /statistics/
+  - title: "ML"
+    url: /ml/
+  - title: "Music"
+    url: /music/
+  # - title: "Posts"
+  #   url: /posts/
+  # - title: "Categories"
+  #   url: /categories/
+  # - title: "Tags"
+  #   url: /tags/
+  - title: "CV"
+    url: /cv/
   - title: "About"
     url: /about/
