@@ -1,9 +1,23 @@
+---
+title: "Theory & Examples: Two Sample t-Tests and Confidence Intervals"
+layout: "notebook"
+excerpt_separator: "<!--more-->"
+categories:
+  # - Blog
+  - Statistics
+tags:
+  - T-Test
+  - Python
+  - Statistical Inference
+---
+
 <!--more-->
+<!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Chapter 10 Examples &amp; Problems</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>2020-10-14-two-sample-t-tests-and-confidence-intervals</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 
 
 
@@ -14259,29 +14273,73 @@ a.anchor-link {
 
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="Test-for-goodness-of-fit-of-the-normal-probability-model">Test for goodness of fit of the normal-probability model<a class="anchor-link" href="#Test-for-goodness-of-fit-of-the-normal-probability-model">&#182;</a></h1><p><strong><em>Taken from page 426 of Funamentals of Biostatistics, 8th Edition, by Bernard Rosner.</em></strong></p>
-
+<h1 id="two-sample-t-tests-and-confidence-intervals,-the-paired-and-unpaired-cases">two sample t-tests and confidence intervals, the paired and unpaired cases<a class="anchor-link" href="#two-sample-t-tests-and-confidence-intervals,-the-paired-and-unpaired-cases">&#182;</a></h1>
 </div>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>For this example, we will utilize the test data from the following hypothetical experiment where diastolic blood-pressure measurements were collected at home in a community-wide screening program of 14,736 adults ages 30-69 in East Boston, MA, as part of a nationwide study to detect and treat hypertensive people. The people int he study were each screened in the home, with two measurements taken during one visit. A frequency distribution of the mean distolic blood pressure is given in the table (see <strong><em>df</em></strong> below) in 10-mm Hg intervals.</p>
-<p>In general, we would like to test the assumption that the data come from an underlying normal distribution because <strong>"standard methods of statistical inference can then be applied on these data"</strong></p>
-<p>How can the validity of this assumption be tested?</p>
+<p>In this notebook we'll go over some of the theory and mechanics for the calculation of p-values and confidence intervals for hypothesis testing in the two sample case involving continuous data (cardinal) data.</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[141]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[1]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">scipy</span>
-<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">chisquare</span><span class="p">,</span> <span class="n">chi2_contingency</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">HTML</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">scipy</span>
 <span class="o">%</span><span class="k">matplotlib</span> inline
+
+<span class="n">pd</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">max_columns</span> <span class="o">=</span> <span class="mi">50</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h3 id="Assumptions-for-the-paired-t-test">Assumptions for the paired t-test<a class="anchor-link" href="#Assumptions-for-the-paired-t-test">&#182;</a></h3><ol>
+<li>Underlying distri- bution normal or central-limit theorem can be assumed to hold (large enough sample size, n &gt; 30)</li>
+<li>Samples are related to each other. </li>
+</ol>
+
+</div>
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>From Section 8.2 of <strong>Fundamentals of Biostatistics by Bernard Rosner, 8th Edition</strong></p>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[17]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">x1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">115</span><span class="p">,</span><span class="mi">112</span><span class="p">,</span><span class="mi">107</span><span class="p">,</span><span class="mi">119</span><span class="p">,</span><span class="mi">115</span><span class="p">,</span><span class="mi">138</span><span class="p">,</span><span class="mi">126</span><span class="p">,</span><span class="mi">105</span><span class="p">,</span><span class="mi">104</span><span class="p">,</span><span class="mi">115</span><span class="p">])</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[18]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">128</span><span class="p">,</span><span class="mi">115</span><span class="p">,</span><span class="mi">106</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">122</span><span class="p">,</span><span class="mi">145</span><span class="p">,</span><span class="mi">132</span><span class="p">,</span><span class="mi">109</span><span class="p">,</span><span class="mi">102</span><span class="p">,</span><span class="mi">117</span><span class="p">])</span>
 </pre></div>
 
      </div>
@@ -14292,17 +14350,11 @@ a.anchor-link {
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[142]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[49]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ranges</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">40</span><span class="p">,</span> <span class="mi">49</span><span class="p">),</span> <span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">59</span><span class="p">),</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="mi">69</span><span class="p">),</span> <span class="p">(</span><span class="mi">70</span><span class="p">,</span> <span class="mi">79</span><span class="p">),</span> <span class="p">(</span><span class="mi">80</span><span class="p">,</span> <span class="mi">89</span><span class="p">),</span> <span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="mi">99</span><span class="p">),</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">109</span><span class="p">),</span> <span class="p">(</span><span class="mi">110</span><span class="p">,</span> <span class="mi">119</span><span class="p">)]</span>
-
-<span class="n">f_obs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">57</span><span class="p">,</span> <span class="mi">330</span><span class="p">,</span> <span class="mi">2132</span><span class="p">,</span> <span class="mi">4584</span><span class="p">,</span> <span class="mi">4604</span><span class="p">,</span> <span class="mi">2119</span><span class="p">,</span> <span class="mi">659</span><span class="p">,</span> <span class="mi">251</span><span class="p">]</span>
-
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">f_obs</span><span class="p">))),</span> 
-                  <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Group&#39;</span><span class="p">,</span><span class="s1">&#39;Observed Frequency&#39;</span><span class="p">],</span> 
-                  <span class="n">data</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">ranges</span><span class="p">,</span> <span class="n">f_obs</span><span class="p">)))</span>
-<span class="n">df</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">diff</span> <span class="o">=</span> <span class="n">x2</span> <span class="o">-</span> <span class="n">x1</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -14318,79 +14370,13 @@ a.anchor-link {
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[142]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
-<div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Group</th>
-      <th>Observed Frequency</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>(40, 49)</td>
-      <td>57</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>(50, 59)</td>
-      <td>330</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>(60, 69)</td>
-      <td>2132</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>(70, 79)</td>
-      <td>4584</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>(80, 89)</td>
-      <td>4604</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>(90, 99)</td>
-      <td>2119</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>(100, 109)</td>
-      <td>659</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>(110, 119)</td>
-      <td>251</td>
-    </tr>
-  </tbody>
-</table>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>[13  3 -1  9  7  7  6  4 -2  2]
+</pre>
 </div>
-</div>
-
 </div>
 
 </div>
@@ -14400,11 +14386,10 @@ a.anchor-link {
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[145]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[23]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Group Average&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Group&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span>
-<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">x1</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">x2</span><span class="p">))</span>
 </pre></div>
 
      </div>
@@ -14420,70 +14405,90 @@ a.anchor-link {
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[145]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
-<div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Group</th>
-      <th>Observed Frequency</th>
-      <th>Group Average</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>(40, 49)</td>
-      <td>57</td>
-      <td>44.5</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>(50, 59)</td>
-      <td>330</td>
-      <td>54.5</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>(60, 69)</td>
-      <td>2132</td>
-      <td>64.5</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>(70, 79)</td>
-      <td>4584</td>
-      <td>74.5</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>(80, 89)</td>
-      <td>4604</td>
-      <td>84.5</td>
-    </tr>
-  </tbody>
-</table>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>9.77957054271812 12.547509713086498
+</pre>
 </div>
 </div>
 
+</div>
+
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[24]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">ttest_rel</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>For a paired t-test<br>
+H0: ∆ = 0<br>
+H1: ∆ != 0<br></p>
+
+</div>
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>Perform a two-sided t test</p>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[25]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">statistic</span><span class="p">,</span> <span class="n">pvalue</span> <span class="o">=</span> <span class="n">ttest_rel</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[26]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">statistic</span><span class="p">,</span> <span class="n">pvalue</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>-3.324651095085193 0.008874336881492044
+</pre>
+</div>
 </div>
 
 </div>
@@ -14493,17 +14498,16 @@ a.anchor-link {
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>The null hypothesis (H0) is that the data come from a normal distribution.</p>
+<p>p &lt; 0.05 so we can conclude at the 95% confidence level that the two (related) samples come from different populations, and that, in this case, the oral contraceptive does indeed seem to affect blood pressure levels. IN other words we accept the alternative hypothesis</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[146]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[28]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># plot just to see if it resembles the normal distribution at all</span>
-<span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;Group Average&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Observed Frequency&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="p">(</span><span class="n">x1</span> <span class="o">-</span> <span class="n">x2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 </pre></div>
 
      </div>
@@ -14519,48 +14523,195 @@ a.anchor-link {
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[146]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[28]:</div>
 
 
 
 
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>&lt;AxesSubplot:xlabel=&#39;Group Average&#39;&gt;</pre>
+<pre>-4.8</pre>
 </div>
 
 </div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>So the average blood pressure decreased from sample x1 to sample x2, with a mean difference of -4.8 units.</p>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[29]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
 
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[29]:</div>
 
 
 
 
-<div class="jp-RenderedImage jp-OutputArea-output ">
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAX0AAAEZCAYAAAB7HPUdAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90bGliIHZlcnNpb24zLjMuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/d3fzzAAAACXBIWXMAAAsTAAALEwEAmpwYAAAdm0lEQVR4nO3de5RU5b3m8e/DHURUoPWgqE0cvGEEocELMQc1CFEHxGhQJ6JOCA6iYU7COkJMRlw5ZMwyK96iZDQiMHrCRY+iJlkHDwadKJGbN/AGRxE6GAGNclGRxt/8sXd3iqaabrCo6u79fNaq1bveffsVdD+169273q2IwMzMsqFFqQswM7PiceibmWWIQ9/MLEMc+mZmGeLQNzPLEIe+mVmGtCp1AfXp2rVrlJeXl7oMM7MmZdmyZZsioqx2e6MP/fLycpYuXVrqMszMmhRJ7+Zrd/eOmVmGOPTNzDLEoW9mliGNvk/fLKt27NhBZWUln332WalLsUasXbt2dO/endatWzdoeYe+WSNVWVnJgQceSHl5OZJKXY41QhHBBx98QGVlJT169GjQOu7eMWukPvvsM7p06eLAtzpJokuXLnv1adChb9aIOfCtPnv7O+LQN7M6VVZWMnz4cHr27MkxxxzD+PHj+fzzzwGYPn061113XYkr3F3Hjh3ztrds2ZI+ffrUPNasWVPcwhoJ9+mbFUH5xN/t9Tr3DevGjsqPap4P+9VzBawI1txy/h7nRwQXXXQRY8eOZd68eezcuZMxY8Zw4403cuuttxa0lmpVVVW0arV/Yql9+/a89NJLeedFBBFBixbN/zjYoW9N2r6EaX3qC8OsePrpp2nXrh1XX301kBwp33bbbfTo0YObb74ZgHXr1jF06FDeeecdLr/8cm666Sa2bdvGt7/9bSorK9m5cyc/+clPGDlyJMuWLeMHP/gBW7dupWvXrkyfPp1u3boxaNAgzjjjDJ577jnOPvtsHnjgAd5++21atGjBJ598wnHHHcfbb7/N2rVrGTduHBs3bqRDhw7cd999HH/88TX7rqqqYujQoQ1+fWvWrOGb3/wmZ511FosWLeKxxx5jzpw5zJkzh+3btzNixIia1zllyhRmzpzJkUceSVlZGf369WPChAkMGjSIX/ziF1RUVLBp0yYqKipYs2YNO3fuZOLEiSxcuJDt27czbtw4rrnmGhYuXMjkyZPp2rUrK1asoF+/fjz44INIYsmSJYwfP55t27bRtm1bFixYwHnnncddd91Fnz59ABg4cCBTp07l5JNP3uf/V4e+meW1cuVK+vXrt0tbp06dOOqoo1i9ejUAixcvZsWKFXTo0IH+/ftz/vnn8+6773L44Yfzu98lb8gff/wxO3bs4Prrr2fevHmUlZUxe/ZsbrzxRqZNmwbARx99xDPPPAPA8uXLeeaZZzjrrLN44oknGDJkCK1bt2bMmDH8+te/pmfPnrzwwgtce+21PP3004wfP56xY8cyatQo7r777jpfz6effloTnj169OC2227jzTff5IEHHuCee+5h/vz5rFq1isWLFxMRDBs2jGeffZYDDjiAWbNm8eKLL1JVVUXfvn13+3ep7f777+eggw5iyZIlbN++nYEDB3LuuecC8OKLL7Jy5UoOP/xwBg4cyHPPPceAAQMYOXIks2fPpn///mzevJn27dszevRopk+fzu23385bb73F9u3bv1Tgg0PfzOoQEXlPEua2Dx48mC5dugBw0UUX8ac//YnzzjuPCRMmcMMNN3DBBRdw5plnsmLFClasWMHgwYMB2LlzJ926davZ5siRI3eZnj17NmeddRazZs3i2muvZevWrTz//PNccsklNctt374dgOeee45HHnkEgCuuuIIbbrgh7+up3b2zZs0ajj76aE477TQA5s+fz/z58znllFMA2Lp1K6tWrWLLli2MGDGCDh06ADBs2LB6/+3mz5/PK6+8wsMPPwwkb3yrVq2iTZs2DBgwgO7duwPUnFs46KCD6NatG/379weSN1eASy65hJ/+9KfceuutTJs2jauuuqrefdfHoW9mefXq1asmTKtt3ryZdevWccwxx7Bs2bLd3hQkceyxx7Js2TJ+//vfM2nSJM4991xGjBhBr169WLRoUd59HXDAATXTw4YNY9KkSXz44YcsW7aMs88+m23btnHwwQfX2Se/r1c55e43Ipg0aRLXXHPNLsvcfvvtdW6/VatWfPHFFwC7XDYZEdx1110MGTJkl+UXLlxI27Zta563bNmSqqqqOt9gO3TowODBg5k3bx5z5swpyOCTzf+shZntk3POOYdPPvmEmTNnAsnR+Q9/+EOuuuqqmqPep556ig8//JBPP/2Uxx57jIEDB7J+/Xo6dOjAd77zHSZMmMDy5cs57rjj2Lhx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
-" />
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
+<pre>10</pre>
 </div>
 
 </div>
 
 </div>
 
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>Even though are sample size is only 10, if the underlying random variable for the blood pressure of this population of women that the sample is taken from is normally distributed, or, if our sample size is large enough, then we can assume the CLT holds and use this t test.</p>
+<p><em>I'm assuming that Dr. Rosner is assuming that the underlying random variable is normally distrbitued, since our sample size is only 10 here...</em></p>
+
+</div>
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h3 id="Paired-95%-CI-for-the-True-Difference-Between-the-Underlying-Means-of-Two-Paired-Samples-(Two-Sided)">Paired 95% CI for the True Difference Between the Underlying Means of Two Paired Samples (Two-Sided)<a class="anchor-link" href="#Paired-95%-CI-for-the-True-Difference-Between-the-Underlying-Means-of-Two-Paired-Samples-(Two-Sided)">&#182;</a></h3><p>From page 282 of <strong>Fundamentals of Biostatistics, 8th Edition, by Bernard Rosner</strong>:</p>
+<p>95% CI = $(\hat{d} − t_{n−1,1−α/2} s_d/\sqrt n,  \hat{d} + t_{n−1,1−α/2} s_d/\sqrt n)$</p>
+<p>$s_{d}=\sqrt{\sum_{i=1}^{n} (d_{i}-\hat{d})^{2} /(n-1)}$</p>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[58]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">std_paired</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">assert</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">b</span> <span class="o">-</span> <span class="n">a</span>
+    <span class="n">var</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">d</span> <span class="o">-</span> <span class="n">d</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">std</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
 </div>
 
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[147]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[59]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">## calculate average and standard deviation</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Group Average&#39;</span><span class="p">],</span> 
-                 <span class="n">repeats</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Observed Frequency&#39;</span><span class="p">])</span> <span class="c1"># create frequency count data</span>
-<span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-<span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># calculate the sample standard deviation of the paired data</span>
+<span class="n">std_paired</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[59]:</div>
+
+
+
+
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
+<pre>4.565571644870382</pre>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[78]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">ci_paired</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Calculates the confidence interval corresponding to significance {alpha} for two related (i.e. &quot;paired&quot;) </span>
+<span class="sd">    vectors a and b.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters:</span>
+<span class="sd">        a -- {np.array}</span>
+<span class="sd">        b -- {np.array}</span>
+<span class="sd">        alpha -- {float}</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        mean_diff -- {float}</span>
+<span class="sd">        ci -- {tuple}</span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="c1"># make sure input vectors are the same length</span>
+    <span class="k">assert</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    
+    <span class="c1"># calculate mean difference</span>
+    <span class="n">mean_diff</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    
+    <span class="c1"># calculate standard deviation of paired samples</span>
+    <span class="n">s_d</span> <span class="o">=</span> <span class="n">std_paired</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+
+    <span class="c1"># generate a t distributed random variable </span>
+    <span class="n">dof</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span> <span class="c1"># calculate degrees of freedom</span>
+    <span class="n">rv</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">t</span><span class="p">(</span><span class="n">dof</span><span class="p">)</span> <span class="c1"># instantiate A Student’s t continuous random variable</span>
+    
+    <span class="c1"># get the t statistics for degrees of freedom and specified alpha</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">rv</span><span class="o">.</span><span class="n">ppf</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> 
+    
+    <span class="c1"># calculate ci</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">mean_diff</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">s_d</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+    <span class="n">ci</span> <span class="o">=</span> <span class="p">(</span><span class="n">mean_diff</span> <span class="o">-</span> <span class="n">t</span> <span class="o">*</span> <span class="p">(</span><span class="n">s_d</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">)),</span> <span class="n">mean_diff</span> <span class="o">+</span> <span class="n">t</span> <span class="o">*</span> <span class="p">(</span><span class="n">s_d</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">)))</span>
+    
+    <span class="k">return</span>  <span class="n">mean_diff</span><span class="p">,</span> <span class="n">ci</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[79]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ci_paired</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -14580,65 +14731,21 @@ a.anchor-link {
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>80.51248642779588 12.125199950491224
+<pre>4.8 2.2621571627409915 4.565571644870382 3.1622776601683795
 </pre>
 </div>
 </div>
 
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[149]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># calculate total samples</span>
-<span class="n">n</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Observed Frequency&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-
-<span class="c1"># create normal distribution from f_obs mean and std. dev. </span>
-<span class="n">norm</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[150]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># plot the modeled normal distribution pdf based on mean and standard deviation of sample data</span>
-<span class="n">r</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[79]:</div>
 
 
 
 
-<div class="jp-RenderedImage jp-OutputArea-output ">
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAYAAAAD6CAYAAACoCZCsAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90bGliIHZlcnNpb24zLjMuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/d3fzzAAAACXBIWXMAAAsTAAALEwEAmpwYAAAUL0lEQVR4nO3df2yd133f8fcnit2kTQfZMBNokjBpAdHBC1rFIGRtAYYijjFJKcrkjxQy2tjzAihCrS0dCixK90fT/7QsaVYDngQ70WJjQTQjzRAiVesKXoMgwOSIdl3ViuOZUL2YNmezyeI2MxBPznd/3EftLXMpPhRpUuJ5v4CLe5/znHPvOYZ1PzzPj3NTVUiS2vOm9e6AJGl9GACS1CgDQJIaZQBIUqMMAElqlAEgSY3qFQBJ9iZ5JslMkiMj9ifJvd3+c0lu6crfkuRbSf4syfkkvzPU5pNJXkjyZPfYv3rDkiQt5c1LVUiyCbgPuB2YBc4mmaqqbw9V2weMd49bgWPd84+A91bVD5NcB3wzyR9W1Zmu3Wer6tN9O3vTTTfVjh07+laXJAGPP/74X1bV2MLyJQMA2A3MVNUFgCQngUlgOAAmgYdqcFfZmSSbk2ypqjngh12d67rHFd95tmPHDqanp6+0uSQ1Kcn/GlXe5xDQVuD5oe3ZrqxXnSSbkjwJvAycrqrHhuod7g4ZnUhywyIdP5hkOsn0/Px8j+5KkvroEwAZUbbwr/hF61TV61W1C9gG7E7yrm7/MeCdwC5gDvjMqA+vqvuraqKqJsbGfmIGI0m6Qn0CYBbYPrS9DXhxuXWq6gfA14G93fZLXTj8GHiAwaEmSdIa6RMAZ4HxJDuTXA8cAKYW1JkC7uyuBtoDvFJVc0nGkmwGSPJW4H3Ad7rtLUPtPwg8tbKhSJKWY8mTwFV1Mclh4BFgE3Ciqs4nOdTtPw6cAvYDM8CrwN1d8y3Ag92VRG8CHq6qr3X7PpVkF4NDRc8BH12tQUmSlpZraTnoiYmJ8iogSVqeJI9X1cTCcu8ElqRGGQCS1CgDQJIa1edOYKk5O478wcjy546+f1XqS1cDZwCS1CgDQJIaZQBIUqMMAElqlAEgSY0yACSpUQaAJDXKAJCkRnkjmJq22A1cUgucAUhSowwASWqUh4CkN9DlDjG5TpDWmzMASWqUMwBpGTxprI3EGYAkNcoAkKRGGQCS1CgDQJIa1SsAkuxN8kySmSRHRuxPknu7/eeS3NKVvyXJt5L8WZLzSX5nqM2NSU4nebZ7vmH1hiVJWsqSAZBkE3AfsA+4Gbgjyc0Lqu0DxrvHQeBYV/4j4L1V9QvALmBvkj3dviPAo1U1DjzabUuS1kifGcBuYKaqLlTVa8BJYHJBnUngoRo4A2xOsqXb/mFX57ruUUNtHuxePwh8YAXjkCQtU58A2Ao8P7Q925X1qpNkU5IngZeB01X1WFfnHVU1B9A9v33Uhyc5mGQ6yfT8/HyP7kqS+ugTABlRVn3rVNXrVbUL2AbsTvKu5XSwqu6vqomqmhgbG1tOU0nSZfS5E3gW2D60vQ14cbl1quoHSb4O7AWeAl7qDhPNJdnCYIYgNWOxu4pdI0hrpc8M4CwwnmRnkuuBA8DUgjpTwJ3d1UB7gFe6L/axJJsBkrwVeB/wnaE2d3Wv7wK+urKhSJKWY8kZQFVdTHIYeATYBJyoqvNJDnX7jwOngP3ADPAqcHfXfAvwYHcl0ZuAh6vqa92+o8DDST4CfBf40OoNS5K0lF6LwVXVKQZf8sNlx4deF3DPiHbngHcv8p7fA25bTmclSavHO4ElqVEGgCQ1ygCQpEb5gzDSVcbLQ7VWnAFIUqMMAElqlAEgSY0yACSpUQaAJDXKAJCkRnkZqJqw2KWVUsucAUhSowwASWqUASBJjfIcgDYUj/VL/TkDkKRGGQCS1CgDQJIaZQBIUqMMAElqlAEgSY0yACSpUb0CIMneJM8kmUlyZMT+JLm3238uyS1d+fYkf5Lk6STnk3xsqM0nk7yQ5MnusX/1hiVJWsqSN4Il2QTcB9wOzAJnk0xV1beHqu0DxrvHrcCx7vki8JtV9USSnwUeT3J6qO1nq+rTqzccSVJffWYAu4GZqrpQVa8BJ4HJBXUmgYdq4AywOcmWqpqrqicAquqvgaeBravYf0nSFeoTAFuB54e2Z/nJL/El6yTZAbwbeGyo+HB3yOhEkhtGfXiSg0mmk0zPz8/36K4kqY8+AZARZbWcOkneBvw+8BtV9Vdd8THgncAuYA74zKgPr6r7q2qiqibGxsZ6dFeS1EefAJgFtg9tbwNe7FsnyXUMvvy/WFVfuVShql6qqter6sfAAwwONUmS1kifADgLjCfZmeR64AAwtaDOFHBndzXQHuCVqppLEuDzwNNV9bvDDZJsGdr8IPDUFY9CkrRsS14FVFUXkxwGHgE2ASeq6nySQ93+48ApYD8wA7wK3N01fw/wYeDPkzzZlf1WVZ0CPpVkF4NDRc8BH12lMUmSeuj1ewDdF/apBWXHh14XcM+Idt9k9PkBqurDy+qpJGlVeSewJDXKAJCkRvmTkLom+dOP0so5A5CkRhkAktQoA0CSGuU5AOkasdh5j+eOvn+Ne6KNwhmAJDXKAJCkRhkAktQoA0CSGmUASFKjDABJapQBIEmNMgAkqVEGgCQ1ygCQpEYZAJLUKANAkhplAEhSowwASWpUrwBIsjfJM0lmkhwZsT9J7u32n0tyS1e+PcmfJHk6yfkkHxtqc2OS00me7Z5vWL1hSZKWsuTvASTZBNwH3A7MAmeTTFXVt4eq7QPGu8etwLHu+SLwm1X1RJKfBR5PcrprewR4tKqOdqFyBPj4Ko5NaoK/E6Ar1WcGsBuYqaoLVfUacBKYXFBnEnioBs4Am5Nsqaq5qnoCoKr+Gnga2DrU5sHu9YPAB1Y2FEnScvQJgK3A80Pbs/ztl3jvOkl2AO8GHuuK3lFVcwDd89t791qStGJ9AiAjymo5dZK8Dfh94Deq6q/6dw+SHEwynWR6fn5+OU0lSZfRJwBmge1D29uAF/vWSXIdgy//L1bVV4bqvJRkS1dnC/DyqA+vqvuraqKqJsbGxnp0V5LUR58AOAuMJ9mZ5HrgADC1oM4UcGd3NdAe4JWqmksS4PPA01X1uyPa3NW9vgv46hWPQpK0bEteBVRVF5McBh4BNgEnqup8kkPd/uPAKWA/MAO8CtzdNX8P8GHgz5M82ZX9VlWdAo4CDyf5CPBd4EOrNipJ0pKWDACA7gv71IKy40OvC7hnRLtvMvr8AFX1PeC25XRWkrR6vBNYkhplAEhSowwASWqUASBJjep1ElhaL4utcyNp5ZwBSFKjDABJapQBIEmNMgAkqVEGgCQ1ygCQpEYZAJLUKANAkhplAEhSo7wTWFcF7/iV1p4zAElqlDMAaYNabFb13NH3r3FPdLVyBiBJjTIAJKlRBoAkNcpzAFpTXu0jXT2cAUhSo3oFQJK9SZ5JMpPkyIj9SXJvt/9ckluG9p1I8nKSpxa0+WSSF5I82T32r3w4kqS+lgyAJJuA+4B9wM3AHUluXlBtHzDePQ4Cx4b2fQHYu8jbf7aqdnWPU8vsuyRpBfrMAHYDM1V1oapeA04CkwvqTAIP1cAZYHOSLQBV9Q3g+6vZaUnSyvUJgK3A80Pbs13ZcuuMcrg7ZHQiyQ096kuSVkmfAMiIsrqCOgsdA94J7ALmgM+M/PDkYJLpJNPz8/NLvKUkqa8+ATALbB/a3ga8eAV1/o6qeqmqXq+qHwMPMDjUNKre/VU1UVUTY2NjPborSeqjTwCcBcaT7ExyPXAAmFpQZwq4s7saaA/wSlXNXe5NL50j6HwQeGqxupKk1bfkjWBVdTHJYeARYBNwoqrOJznU7T8OnAL2AzPAq8Ddl9on+RLwi8BNSWaB366qzwOfSrKLwaGi54CPrt6wJElL6XUncHeJ5qkFZceHXhdwzyJt71ik/MP9uylJWm3eCSxJjTIAJKlRLgYnNcYfitElzgAkqVEGgCQ1ygCQpEYZAJLUKANAkhplAEhSowwASWqUASBJjTIAJKlRBoAkNcoAkKRGuRaQJMA1glrkDECSGmUASFKjDABJapQBIEmN8iSwVt1iJxMlXV2cAUhSowwASWpUrwBIsjfJM0lmkhwZsT9J7u32n0tyy9C+E0leTvLUgjY3Jjmd5Nnu+YaVD0eS1NeSAZBkE3AfsA+4Gbgjyc0Lqu0DxrvHQeDY0L4vAHtHvPUR4NGqGgce7bYlSWukzwxgNzBTVReq6jXgJDC5oM4k8FANnAE2J9kCUFXfAL4/4n0ngQe71w8CH7iC/kuSrlCfANgKPD+0PduVLbfOQu+oqjmA7vntoyolOZhkOsn0/Px8j+5KkvroEwAZUVZXUOeKVNX9VTVRVRNjY2Or8ZaSJPoFwCywfWh7G/DiFdRZ6KVLh4m655d79EWStEr6BMBZYDzJziTXAweAqQV1poA7u6uB9gCvXDq8cxlTwF3d67uAry6j35KkFVoyAKrqInAYeAR4Gni4qs4nOZTkUFftFHABmAEeAH79UvskXwL+B/BzSWaTfKTbdRS4PcmzwO3dtiRpjfRaCqKqTjH4kh8uOz70uoB7Fml7xyLl3wNu691TSdKqci0gSZflD8VsXC4FIUmNMgAkqVEeAtIVc9ln6drmDECSGmUASFKjDABJapQBIEmNMgAkqVEGgCQ1ygCQpEYZAJLUKANAkhplAEhSowwASWqUASBJjTIAJKlRrgaqJbnqp0bxh2Kufc4AJKlRBoAkNcoAkKRGeQ5Af8Nj/VJbes0AkuxN8kySmSRHRuxPknu7/eeS3LJU2ySfTPJCkie7x/7VGZIkqY8lAyDJJuA+YB9wM3BHkpsXVNsHjHePg8Cxnm0/W1W7useplQ5GktRfnxnAbmCmqi5U1WvASWByQZ1J4KEaOANsTrKlZ1tJ0jroEwBbgeeHtme7sj51lmp7uDtkdCLJDaM+PMnBJNNJpufn53t0V5LUR58AyIiy6lnncm2PAe8EdgFzwGdGfXhV3V9VE1U1MTY21qO7kqQ++lwFNAtsH9reBrzYs871i7WtqpcuFSZ5APha715LklaszwzgLDCeZGeS64EDwNSCOlPAnd3VQHuAV6pq7nJtu3MEl3wQeGqFY5EkLcOSM4CqupjkMPAIsAk4UVXnkxzq9h8HTgH7gRngVeDuy7Xt3vpTSXYxOCT0HPDRVRyXJGkJqVp4OP/qNTExUdPT0+vdjQ3LG8H0RnKRuPWT5PGqmlhY7p3AktaEq4defVwLSJIaZQBIUqM8BNQgj/VLAmcAktQsA0CSGuUhIEnr6nKHJL1C6I3lDECSGmUASFKjDABJapQBIEmN8iTwBub1/pIuxxmAJDXKAJCkRnkISNJVyxVE31jOACSpUQaAJDXKQ0AbgFf7SLoSBsA1xC96SavJAJB0zfHk8OowACRtGAbD8hgAVyEP9UhaC70CIMle4PeATcDnqurogv3p9u8HXgX+RVU9cbm2SW4E/iuwA3gO+JWq+j8rH9K1wy96aW04MxhtyQBIsgm4D7gdmAXOJpmqqm8PVdsHjHePW4FjwK1LtD0CPFpVR5Mc6bY/vnpDW3v+TyZdW5b7b3aj/RvvMwPYDcxU1QWAJCeBSWA4ACaBh6qqgDNJNifZwuCv+8XaTgK/2LV/EPg6b2AArOdf2/6lL11blvtvdrWCYa1/Ha1PAGwFnh/anmXwV/5SdbYu0fYdVTUHUFVzSd4+6sOTHAQOdps/TPJMjz6vtZuAv1zvTqwDx90Wx71M+fer14kVvtc/GFXYJwAyoqx61unT9rKq6n7g/uW0WWtJpqtqYr37sdYcd1sc98bTZymIWWD70PY24MWedS7X9qXuMBHd88v9uy1JWqk+AXAWGE+yM8n1wAFgakGdKeDODOwBXukO71yu7RRwV/f6LuCrKxyLJGkZljwEVFUXkxwGHmFwKeeJqjqf5FC3/zhwisEloDMMLgO9+3Jtu7c+Cjyc5CPAd4EPrerI1tZVfYjqDeS42+K4N5gMLtyRJLXG5aAlqVEGgCQ1ygC4Akk2JfnTJF/rtm9McjrJs93zDevdxzdCd4Pfl5N8J8nTSf7JRh97kn+T5HySp5J8KclbNuqYk5xI8nKSp4bKFh1rkk8kmUnyTJJ/vj69XplFxvwfuv/HzyX5b0k2D+275sc8zAC4Mh8Dnh7avrSsxTjwaLe9Ef0e8EdV9Y+AX2Dw32DDjj3JVuBfAxNV9S4GFzIcYOOO+QvA3gVlI8ea5GYG/y3+cdfmP3VLv1xrvsBPjvk08K6q+nngfwKfgA015r9hACxTkm3A+4HPDRVPMljOgu75A2vcrTdckr8H/DPg8wBV9VpV/YCNP/Y3A29N8mbgpxncx7Ihx1xV3wC+v6B4sbFOAier6kdV9RcMrgDcvRb9XE2jxlxVf1xVF7vNMwzuX4INMuZhBsDy/Ufg3wI/Hir7O8taACOXtbjG/UNgHvjP3eGvzyX5GTbw2KvqBeDTDC5TnmNwf8sfs4HHPMJiY11s+ZeN5l8Cf9i93nBjNgCWIckvAS9X1ePr3Zd18GbgFuBYVb0b+L9snEMfI3XHuyeBncDfB34mya+tb6+uGite5uVql+TfAReBL14qGlHtmh6zAbA87wF+OclzwEngvUn+C20sazELzFbVY932lxkEwkYe+/uAv6iq+ar6f8BXgH/Kxh7zQouNtc8SMdesJHcBvwT8av3tzVIbbswGwDJU1SeqaltV7WBwMui/V9Wv0cCyFlX1v4Hnk/xcV3Qbg2W9N/LYvwvsSfLT3Y8e3cbgxPdGHvNCi411CjiQ5KeS7GTwWyDfWof+rbruR6w+DvxyVb06tGvDjdmfhFwdG2lZi8v5V8AXu3WdLjBY8uNNbNCxV9VjSb4MPMHgUMCfMlgW4G1swDEn+RKD3+i4Kcks8Nss8v92txzMwwz+CLgI3FNVr69Lx1dgkTF/Avgp4PQg9zlTVYc2ypiHuRSEJDXKQ0CS1CgDQJIaZQBIUqMMAElqlAEgSY0yACSpUQaAJDXq/wPvWL4PgCnEVAAAAABJRU5ErkJggg==
-" />
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
+<pre>(4.8, (1.5339867942207275, 8.066013205779273))</pre>
 </div>
 
 </div>
@@ -14650,31 +14757,47 @@ a.anchor-link {
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>The value chi-squared test statistic is calculated across all rows in the table as:</p>
-\begin{equation*}
-\left( \sum_{i=1}^n (O_i-E_i)^2/E_i \right)
-\end{equation*}<p>This means we need to calculate the <strong>Expected Frequency</strong>. The expected frequency is calculated from the normal distribution based on the parameters derived from the sample data (mean=u, standard deviation=s). We use this distribution's CDF to calculate the probability of getting a value within each "Group" (determined by the group's end points), and then multiply that probability density by the total sample size, n, to get the <strong>Expected Frequency</strong> for each blood-pressure measurement group.</p>
+<h3 id="Assumptions-for-the-independent-t-test">Assumptions for the independent t test<a class="anchor-link" href="#Assumptions-for-the-independent-t-test">&#182;</a></h3><ol>
+<li>Underlying population variances that the two samples are drawn from are equal</li>
+<li>Underlying populations are normally distributed</li>
+</ol>
 
 </div>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>The requirements for using this test are:</p>
-<ul>
-<li>A) no more than 1/5 of the expected values are &lt; 5</li>
-<li>B) no expected value is &lt; 1</li>
-</ul>
-<p>Both of these criteria are met in this example.</p>
+<p><em>From Section 8.4 of</em> <strong><em>Fundamentals of Biostatistics by Bernard Rosner, 8th Edition</em></strong></p>
+<p>Hypertension Suppose a sample of eight 35- to 39-year-old nonprenant, premeno- pausal OC users who work in a company and have a mean systolic blood pres- sure (SBP) of 132.86 mm Hg and sample standard deviation of 15.34 mm Hg are identified. A sample of 21 nonpregnant, premenopausal, non-OC users in the same age group are similarly identified who have mean SBP of 127.44 mm Hg and sample standard deviation of 18.23 mm Hg. What can be said about the underlying mean difference in blood pressure between the two groups?</p>
+<p>Assume SBP is normally distributed in the first group with mean μ1 and variance σ1 and in the second group with mean μ2 and variance σ2. We want to test the hypothesis H0: μ1 = μ2 vs. H1: μ1 ≠ μ2. Assume in this section that the underlying variances in the two groups are the same (that is, σ12 = σ2 = σ2). The means and variances in the two samples are denoted by x1 x2 , s12 , s2 , respectively.</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[154]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[80]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># calculate expected frequency and chi-squared test statistic</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Expected Frequency&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;Group&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;Group&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span> <span class="o">*</span> <span class="n">n</span> <span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">ttest_ind</span><span class="p">,</span> <span class="n">ttest_ind_from_stats</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[81]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># sample data</span>
+<span class="n">mean1</span> <span class="o">=</span> <span class="mf">132.86</span>
+<span class="n">std1</span> <span class="o">=</span> <span class="mf">15.34</span>
+<span class="n">nobs1</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">mean2</span> <span class="o">=</span> <span class="mf">127.44</span>
+<span class="n">std2</span> <span class="o">=</span> <span class="mf">18.23</span>
+<span class="n">nobs2</span> <span class="o">=</span> <span class="mi">21</span>
 </pre></div>
 
      </div>
@@ -14685,17 +14808,10 @@ a.anchor-link {
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[155]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[82]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># calculate degrees of freedom </span>
-<span class="n">dof</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span> <span class="c1"># g - k - 1, where g = cell count, k = parameters (two: mean and std. dev)</span>
-
-<span class="c1"># calculate chi-squared test statistic and associated p-value</span>
-<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">chisquare</span>
-<span class="n">chisq</span><span class="p">,</span> <span class="n">pvalue</span> <span class="o">=</span> <span class="n">chisquare</span><span class="p">(</span><span class="n">f_obs</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Observed Frequency&#39;</span><span class="p">],</span> <span class="n">f_exp</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Expected Frequency&#39;</span><span class="p">],</span> <span class="n">ddof</span><span class="o">=</span><span class="n">dof</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="n">chisq</span><span class="p">,</span> <span class="n">pvalue</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">mean2</span> <span class="o">-</span> <span class="n">mean1</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -14715,7 +14831,44 @@ a.anchor-link {
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>564.6737684529562 2.413510222813826e-123
+<pre>-5.420000000000016
+</pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[83]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">statistic</span><span class="p">,</span> <span class="n">pvalue</span> <span class="o">=</span> <span class="n">ttest_ind_from_stats</span><span class="p">(</span><span class="n">mean1</span><span class="p">,</span> <span class="n">std1</span><span class="p">,</span> <span class="n">nobs1</span><span class="p">,</span> <span class="n">mean2</span><span class="p">,</span> <span class="n">std2</span><span class="p">,</span> <span class="n">nobs2</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">statistic</span><span class="p">,</span> <span class="n">pvalue</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>0.7443175718105018 0.46311371461667283
 </pre>
 </div>
 </div>
@@ -14727,16 +14880,67 @@ a.anchor-link {
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>p &lt; 0.001, thus we can reject the null hypothesis (H0: the sample comes from a normal distribution) as the results are highly significant.</p>
+<p>Even though the mean difference between the two samples in both experiments are similar, we get wildly different p values - the paired t-test example rejects H0, whereas the independent t-test example accepts H0.</p>
+<p><em>What this proves for me is that paired t-test is much more sensitive to differences than the independent t-test. In other words, you need a much more significant difference between two independent samples to detect a difference than you would if the samples were paired. This makes intuitive sense because for paired data, we've (supposedly) accounted for many confounding variables, so we can attribute much more of the variance in the measurement of interest between the two (paired) samples to the intervention.</em></p>
+
+</div>
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h3 id="Calculating-the-95%-CI">Calculating the 95% CI<a class="anchor-link" href="#Calculating-the-95%-CI">&#182;</a></h3><p>Estimating the population variance by combining the sample variances - the combined variance is just a weighted sum of the individual variances:<br>
+<strong>pooled estimate of the variance</strong> (from page 287 of Fundamentals of Biostatistics): 
+$$s^{2}=\frac{\left(n_{1}-1\right) s_{1}^{2}+\left(n_{2}-1\right) s_{2}^{2}}{n_{1}+n_{2}-2}$$</p>
+<p>take the square root to get the combined standard deviation:<br>
+$$s = \sqrt{ \frac{\left(n_{1}-1\right) s_{1}^{2}+\left(n_{2}-1\right) s_{2}^{2}}{n_{1}+n_{2}-2}}$$<br></p>
+<p>As usual, the CI is calculated by taking the average (in this case the difference in means from the two samples) and adding/subtracting the t statistic mulitplied by the standard deviation of the sampling distribution. (for a full derivation, see page 287 from the text).</p>
+<p>95% CI = $(\hat{x_1} - \hat{x_2} − t_{n_1+n_2-2,1−α/2} * s /\sqrt{1/n_1 + 1/n_2},  \hat{x_1} - \hat{x_2} + t_{n_1+n_2-2,1−α/2} * s/\sqrt{1/n_1 + 1/n_2})$</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[88]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span> 
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">ci_ind</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Calculates the confidence interval corresponding to significance {alpha} for two independent</span>
+<span class="sd">    samples a and b.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters:</span>
+<span class="sd">        a -- {np.array}</span>
+<span class="sd">        b -- {np.array}</span>
+<span class="sd">        alpha -- {float}</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        mean_diff -- {float}</span>
+<span class="sd">        ci -- {tuple}</span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="c1"># make sure input vectors are the same length</span>
+    <span class="k">assert</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+    <span class="n">n1</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">n2</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+    
+    <span class="n">s1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">s2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+    <span class="n">var</span> <span class="o">=</span> <span class="p">((</span><span class="n">n1</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">s1</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">n2</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">s2</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">n1</span> <span class="o">+</span> <span class="n">n2</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+    
+    <span class="c1"># calculate mean difference</span>
+    <span class="n">diff</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">-</span> <span class="n">a</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    
+
+    <span class="c1"># generate a t distributed random variable </span>
+    <span class="n">dof</span> <span class="o">=</span> <span class="n">n1</span> <span class="o">+</span> <span class="n">n2</span> <span class="o">-</span> <span class="mi">2</span> <span class="c1"># calculate degrees of freedom</span>
+    <span class="n">rv</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">t</span><span class="p">(</span><span class="n">dof</span><span class="p">)</span> <span class="c1"># instantiate A Student’s t continuous random variable</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">rv</span><span class="o">.</span><span class="n">ppf</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> 
+    
+    <span class="c1"># calculate ci</span>
+    <span class="n">ci</span> <span class="o">=</span> <span class="p">(</span><span class="n">diff</span> <span class="o">-</span> <span class="n">t</span> <span class="o">*</span> <span class="p">(</span><span class="n">std</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="n">n1</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">n2</span><span class="p">))),</span> <span class="n">diff</span> <span class="o">+</span> <span class="n">t</span> <span class="o">*</span> <span class="p">(</span><span class="n">std</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="n">n1</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">n2</span><span class="p">))))</span>
+    
+    <span class="k">return</span>  <span class="n">diff</span><span class="p">,</span> <span class="n">ci</span>
 </pre></div>
 
      </div>
@@ -14744,6 +14948,49 @@ a.anchor-link {
 </div>
 </div>
 
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[89]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ci_ind</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[89]:</div>
+
+
+
+
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
+<pre>(4.800000000000011, (-10.896250035340964, 20.496250035340985))</pre>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>As expected, our CI is much wider and in this case includes 0, re-affirming our un-significant results (based on the p-value from our independent t-test).</p>
+
+</div>
 </div>
 </body>
 
@@ -14754,4 +15001,3 @@ a.anchor-link {
 
 
 </html>
-
