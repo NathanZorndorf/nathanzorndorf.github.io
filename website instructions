@@ -1,0 +1,22 @@
+How to export jupyter notebooks to my website:
+1. Download notebook as html file 
+2. Move file to /_posts folder
+3. rename file with convention and replace .html with .md
+4. Add header to top of file, like so:
+	---
+	title: "Example: Performing One Sample Z-Tests and t-Tests in Python"
+	layout: "notebook"
+	excerpt_separator: "<!--more-->"
+	categories:
+	  # - Blog
+	  - Statistics
+	tags:
+	  - Z-Test
+	  - T-Test
+	  - Python
+	  - Statistical Inference
+	---
+5. If you don't want a post excerpt to appear under the title of the post, then include <!--more--> just above the line that contains <!DOCTYPE html> and make sure excerpt_separator: "<!--more-->" is contained in the text in step 4.
+
+How to run Jekyll site locally:
+$ bundle exec jekyll serve
