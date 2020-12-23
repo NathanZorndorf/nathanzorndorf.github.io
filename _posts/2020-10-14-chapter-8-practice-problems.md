@@ -2,13 +2,6 @@
 title: "Practice Problems: Paired & Unpaired t-test, Power, Sample Size"
 layout: "notebook"
 excerpt_separator: "<!--more-->"
-categories:
-  # - Blog
-  - Statistics
-tags:
-  - T-Test
-  - Python
-  - Statistical Inference
 ---
 
 <!--more-->

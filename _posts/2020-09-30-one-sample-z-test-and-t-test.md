@@ -2,14 +2,6 @@
 title: "Example: Performing One Sample Z-Tests and t-Tests in Python"
 layout: "notebook"
 excerpt_separator: "<!--more-->"
-categories:
-  # - Blog
-  - Statistics
-tags:
-  - Z-Test
-  - T-Test
-  - Python
-  - Statistical Inference
 ---
 
 <!--more-->

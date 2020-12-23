@@ -2,13 +2,6 @@
 title: "Example: Performing a Chi-Square Goodness-of-Fit Test in Python"
 layout: "notebook"
 excerpt_separator: "<!--more-->"
-categories:
-  # - Blog
-  - Statistics
-tags:
-  - Chi-square
-  - Python
-  - Example
 ---
 
 <!--more-->

@@ -2,18 +2,8 @@
 title: "Notes on 'Philosophy of Science: A Very Short Introduction'"
 date:   2020-12-21
 author_profile: true
-permalink: musings/philosophy-of-science.html
-classes: wide
-
-# layout: "notebook"
-# excerpt_separator: "<!--more-->"
-# categories:
-  # - Blog
-  # - Statistics
-# tags:
-#   - T-Test
-#   - Python
-#   - Statistical Inference
+# classes: wide
+# toc: true
 ---
 
 # Notes on Philosophy of Science

@@ -21,7 +21,8 @@ description: >- # this means to ignore newlines until "baseurl:"
   particularly the intersection of diet and mental health and personalized nutrition.
 # twitter_username: username
 github_username: NathanZorndorf
-minimal_mistakes_skin: contrast
+# minimal_mistakes_skin: contrast
+minimal_mistakes_skin: dark
 search: true
 
 # Build settings
@@ -31,12 +32,13 @@ remote_theme: "mmistakes/minimal-mistakes@4.20.2"
 # Outputting
 permalink: /:categories/:title/
 # permalink: /:categories/:year/:month/:day/:title:output_ext
-paginate: 5 # amount of posts to show
+paginate: 20 # amount of posts to show
 paginate_path: /page:num/
 timezone: # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
-include:
-  - _pages
+# include:
+  # - _pages
+include: ["_pages"]
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
@@ -103,7 +105,7 @@ defaults:
       related: true
   # _pages
   - scope:
-      path: "_pages"
+      path: ""
       type: pages
     values:
       layout: single

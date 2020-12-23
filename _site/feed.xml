@@ -1,4 +1,176 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-10-15T17:59:40-07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Nathan Zorndorf</title><subtitle>Nathan Zorndorf is a data scientist based in the San Francisco bay area,  interested in renewable energy and health analytics,  particularly the intersection of diet and mental health and personalized nutrition.</subtitle><author><name>Nathan Zorndorf</name></author><entry><title type="html">Practice Problems: Paired &amp;amp; Unpaired t-test, Power, Sample Size</title><link href="http://localhost:4000/statistics/chapter-8-practice-problems/" rel="alternate" type="text/html" title="Practice Problems: Paired &amp; Unpaired t-test, Power, Sample Size" /><published>2020-10-14T00:00:00-07:00</published><updated>2020-10-14T00:00:00-07:00</updated><id>http://localhost:4000/statistics/chapter-8-practice-problems</id><content type="html" xml:base="http://localhost:4000/statistics/chapter-8-practice-problems/">&lt;!--more--&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-22T17:02:41-08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Nathan Zorndorf</title><subtitle>Nathan Zorndorf is a data scientist based in the San Francisco bay area,  interested in renewable energy and health analytics,  particularly the intersection of diet and mental health and personalized nutrition.</subtitle><author><name>Nathan Zorndorf</name></author><entry><title type="html">Notes on ‘Philosophy of Science: A Very Short Introduction’</title><link href="http://localhost:4000/notes-on-philosophy-of-science-a-very-short-introduction/" rel="alternate" type="text/html" title="Notes on 'Philosophy of Science: A Very Short Introduction'" /><published>2020-12-21T00:00:00-08:00</published><updated>2020-12-21T00:00:00-08:00</updated><id>http://localhost:4000/notes-on-philosophy-of-science-a-very-short-introduction</id><content type="html" xml:base="http://localhost:4000/notes-on-philosophy-of-science-a-very-short-introduction/">&lt;h1 id=&quot;notes-on-philosophy-of-science&quot;&gt;Notes on Philosophy of Science&lt;/h1&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Scientific claims must be falsifiable&lt;/li&gt;
+  &lt;li&gt;Deductive reasoning - if the premises are true, then the conclusion must be true as well. (Ex. All Frenchmen like red wine, Pierre is a Frenchman, therefore Pierre likes red wine).
+    &lt;ol&gt;
+      &lt;li&gt;(Me:) Says nothing interesting, because it only describes, it does not make inferences/generalizations that we can apply to unseen data&lt;/li&gt;
+      &lt;li&gt;Popper’s claim: a scientific claim is one that is “falsifiable”, it can be proven wrong.
+        &lt;ol&gt;
+          &lt;li&gt;The refutation of theories is possible with deductive reasoning.&lt;/li&gt;
+          &lt;li&gt;“Finds one piece of metal that does not conduct electricity” -&amp;gt; “it is false that all pieces of metal conduct electricity” is deductive reasoning&lt;/li&gt;
+        &lt;/ol&gt;
+      &lt;/li&gt;
+      &lt;li&gt;Deductive reasoning can be used to prove theories false, but it cannot be used to prove that theories are true.&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Inductive reasoning - The first five eggs in the box were good, all the eggs have the same best-before date stamped on them, therefore the sixth egg will be good too.
+    &lt;ol&gt;
+      &lt;li&gt;(Me): Helpful insomuch as it makes accurate predictions on new data&lt;/li&gt;
+      &lt;li&gt;Humes problem: use of induction cannot be justified rationally, because induction requires generalizing from objects we have seen to objects that we haven’t (the ‘uniformity of nature’).
+        &lt;ol&gt;
+          &lt;li&gt;Can we prove that the uniformity of nature is true? No, because justifying it involves circular reasoning. The uniformity of nature may have proven to hold true up until now, but that does not mean it will continue to hold true in the future. “To argue that induction is trustworthy because it has worked well up to now is to reason inductively”&lt;/li&gt;
+        &lt;/ol&gt;
+      &lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Inference to the Best Explanation (IBE)
+    &lt;ol&gt;
+      &lt;li&gt;One criteria for finding a ‘best explanation of the data’ is that of preferring the simpler explanation (explanations that are more parsimonious/require fewer conditions) (Ex. mouse hypothesis vs. maid &amp;amp; boiler hypothesis)&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Causal Inference
+    &lt;ol&gt;
+      &lt;li&gt;￼￼It is sometimes argued that controlled experiments are the only reliable way of making causal inferences in science.&lt;/li&gt;
+      &lt;li&gt;In recent years, statisticians and computer scientists have developed powerful techniques for making causal inferences from observational data.&lt;/li&gt;
+      &lt;li&gt;Much of the knowledge we have gained in life does not come from RCT. RCT is a very rigorous method that is unnecessary in many cases.&lt;/li&gt;
+      &lt;li&gt;Probability and Inference
+        &lt;ol&gt;
+          &lt;li&gt;Probability has both an objective and a subjective guise.&lt;/li&gt;
+          &lt;li&gt;In its objective guise, probability refers to how often things in the world happen, or tend to happen (frequentists). Understood this way, statements about probability are objectively true or false, independently of what anyone believes.
+            &lt;ol&gt;
+              &lt;li&gt;Ex. The result of a coin flip is either heads or tails - there is no probability about it, and we are not interested in our belief about the the result (that would be the Bayesian approach).&lt;/li&gt;
+            &lt;/ol&gt;
+          &lt;/li&gt;
+          &lt;li&gt;In its subjective guise, probability is a measure of rational degree of belief. (Bayesian). Now since there either is life on Mars or there isn’t, talk of probability in this context must presumably reflect our ignorance of the state of the world, rather than describing an objective feature of the world itself.
+            &lt;ol&gt;
+              &lt;li&gt;The idea is that any rational scientist can be thought of as having an initial credence in their theory or hypothesis, which they then update in the light of new evidence or data by following the rule of conditionalization.
+                &lt;ol&gt;
+                  &lt;li&gt;If the only objective constraints concern how we should change our credences, but what our initial credences should be is entirely subjective, then individuals with very bizarre opinions about the world will count as perfectly rational. So a probabilistic escape from Hume’s problem will not fall out of the Bayesian view of scientific inference.&lt;/li&gt;
+                &lt;/ol&gt;
+              &lt;/li&gt;
+            &lt;/ol&gt;
+          &lt;/li&gt;
+        &lt;/ol&gt;
+      &lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Chapter 3 - Explanation in Science
+    &lt;ol&gt;
+      &lt;li&gt;Hempel’s Covering Law Model of Scientific Explanation
+        &lt;ol&gt;
+          &lt;li&gt;The task of providing an account of scientific explanation then becomes the task of characterizing precisely the relation that must hold between a set of premises and a conclusion, in order for the former to count as an explanation of the latter.
+            &lt;ol&gt;
+              &lt;li&gt;Deductive reasoning&lt;/li&gt;
+              &lt;li&gt;Premises must all be true&lt;/li&gt;
+              &lt;li&gt;Must consist of at least one general law&lt;/li&gt;
+            &lt;/ol&gt;
+          &lt;/li&gt;
+          &lt;li&gt;Covering law model structure: = set of facts + general law -&amp;gt; phenomenon to be explained&lt;/li&gt;
+          &lt;li&gt;Hempel said that every scientific explanation is potentially a prediction, and every correct prediction is possibly an explanation.&lt;/li&gt;
+          &lt;li&gt;Problem: Hempel’s covering model is too liberal (classifies explanations as scientific that clearly are not)
+            &lt;ol&gt;
+              &lt;li&gt;Case 1: Problem of symmetry - in general, if x explains y, given the relevant laws and additional facts, then it will not be true that y explains x, given the same laws and facts (Ex. flagpole example)&lt;/li&gt;
+              &lt;li&gt;Case 2: The Problem of Irrelevance  - a good explanation of a phenomenon should contain information that is relevant to the phenomenon’s occurrence (John and the maternity ward example)&lt;/li&gt;
+            &lt;/ol&gt;
+          &lt;/li&gt;
+        &lt;/ol&gt;
+      &lt;/li&gt;
+      &lt;li&gt;Explanation and causality
+        &lt;ol&gt;
+          &lt;li&gt;Causality is asymmetric
+            &lt;ol&gt;
+              &lt;li&gt;Covering law model has no concept of causality built into it - hence the awkward examples of “scientific explanations”&lt;/li&gt;
+              &lt;li&gt;Hempel subscribed to the philosophical doctrine called empiricism, and empiricists are traditionally suspicious of the concept of causality.
+                &lt;ol&gt;
+                  &lt;li&gt;Empiricism says that all our knowledge comes from experience.&lt;/li&gt;
+                  &lt;li&gt;David Hume, was a leading empiricist, and he argued that it is impossible to experience causal relations. So he concluded that they don’t exist—causality is something that we humans ‘project’ onto the world!
+                    &lt;ol&gt;
+                      &lt;li&gt;He allowed that it is an objective fact that most glass vases which have been dropped have in fact broken. But our idea of causality includes more than this. It includes the idea of a causal connection between the dropping and the breaking, i.e. that the former brings about the latter. No such connections are to be found in the world - we just experience sounds, sights, feelings, but that their connection is a man-made story.
+                        &lt;ol&gt;
+                          &lt;li&gt;This is very buddhist-like, actually. It’s encompassed in the idea of illusion - that there is no objectivity or subjectivity, there is just pure experience. That is all we’re ever doing - experiencing thoughts, or sensations - so there actually is no story possible, no causal explanation possible, just the illusion of it as experienced by the various mental and physical senses.&lt;/li&gt;
+                        &lt;/ol&gt;
+                      &lt;/li&gt;
+                    &lt;/ol&gt;
+                  &lt;/li&gt;
+                &lt;/ol&gt;
+              &lt;/li&gt;
+              &lt;li&gt;Many philosophers have come to the conclusion that the concept of causality, although problematic, is indispensable to how we understand the world.&lt;/li&gt;
+            &lt;/ol&gt;
+          &lt;/li&gt;
+        &lt;/ol&gt;
+      &lt;/li&gt;
+      &lt;li&gt;Can science explain everything?
+        &lt;ol&gt;
+          &lt;li&gt;However much the science of the future can explain, the explanations it gives will have to make use of certain fundamental laws and principles. Since nothing can explain itself, it follows that at least some of these laws and principles will themselves remain unexplained.&lt;/li&gt;
+        &lt;/ol&gt;
+      &lt;/li&gt;
+      &lt;li&gt;Explanation and reduction
+        &lt;ol&gt;
+          &lt;li&gt;Multiple realization - It’s an attempt at solving the philosophical puzzle of, if economics eventually comes down to particles of matter, shouldn’t physics be able to make economic predictions? Yet, in practice, physics does not make predictions concerning biology or economics - they are autonomous disciplines.
+            &lt;ol&gt;
+              &lt;li&gt;so it is impossible to define the concept ‘ashtray’ in purely physical terms. We cannot find a true statement of the form ‘x is an ashtray if and only if x is…’ where the blank is filled by an expression taken from the language of physics. This means that ashtrays are multiply realized at the physical level.&lt;/li&gt;
+              &lt;li&gt;The answer is that objects studied in the higher sciences are multiply realized at the physical level.
+                &lt;ol&gt;
+                  &lt;li&gt;(My example): If you take a dog - we cannot define a dog using the language of physics, we must use the language of biology. Because a dog can have many varieties (spotted, big, small, matted vs curly hair, etc).&lt;/li&gt;
+                  &lt;li&gt;(My opinion): it comes down to abstraction and language - again, no model is correct, some are just better than others (in some cases).&lt;/li&gt;
+                  &lt;li&gt;This concept is embodied in Buddhism by the concept of emptiness.&lt;/li&gt;
+                &lt;/ol&gt;
+              &lt;/li&gt;
+              &lt;li&gt;There is no true statement of the form ‘x is a cell if and only if x is . . .’ where the blank is filled by an expression taken from the language of microphysics… The vocabulary of cell biology and the vocabulary of physics do not map onto each other in the required way.&lt;/li&gt;
+            &lt;/ol&gt;
+          &lt;/li&gt;
+        &lt;/ol&gt;
+      &lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Chapter 4 - Realism vs Anti-realism
+    &lt;ol&gt;
+      &lt;li&gt;Realism holds that the physical world exists independently of human thought and perception. Idealism denies this—it claims that the physical world is in some way dependent on the conscious activity of humans.&lt;/li&gt;
+      &lt;li&gt;Realists hold that science aims to provide a true description of the world. anti-realists hold that the aim of science is to find theories that are empirically adequate, i.e. which correctly predict the results of experiment and observation.
+        &lt;ol&gt;
+          &lt;li&gt;The rest of this chapter is a back and forth debate between realist perspective and the anti-realist perspective. It is a blast to read.&lt;/li&gt;
+        &lt;/ol&gt;
+      &lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Chapter 5 - Scientific Change and Scientific Revolutions
+    &lt;ol&gt;
+      &lt;li&gt;In 1963, Thomas Kuhn published a book called The Structure of Scientific Revolutions
+        &lt;ol&gt;
+          &lt;li&gt;Before Kuhn, science, for the logical empiricists was thus a paradigmatically rational activity, the surest route to the truth that there is.&lt;/li&gt;
+          &lt;li&gt;The essence of a scientific revolution is the shift from an old paradigm to a new one.&lt;/li&gt;
+          &lt;li&gt;Kuhn suggested that facts about the world are paradigm-relative, and thus change when paradigms change.&lt;/li&gt;
+        &lt;/ol&gt;
+      &lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Chapter 6 - Philosophical Problems in Physics, Biology, and Psychology
+    &lt;ol&gt;
+      &lt;li&gt;Q: Is there a ‘correct’ way to classify, or are all classification schemes ultimately arbitrary?
+        &lt;ol&gt;
+          &lt;li&gt;Particularly important for taxonomy in biology, because biologists do not agree on what a species actually is, nor therefore on what criteria should be used for identifying species (‘the species problem’)
+            &lt;ol&gt;
+              &lt;li&gt;Biological species concept (BSC),hybrid zones, ring species, “genuine kinds”,&lt;/li&gt;
+            &lt;/ol&gt;
+          &lt;/li&gt;
+        &lt;/ol&gt;
+      &lt;/li&gt;
+      &lt;li&gt;Q: Is the mind modular?&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Chapter 7 - Science and its Critics
+    &lt;ol&gt;
+      &lt;li&gt;Scientism&lt;/li&gt;
+      &lt;li&gt;Science and Religion
+        &lt;ol&gt;
+          &lt;li&gt;Creationism vs. Darwinism&lt;/li&gt;
+        &lt;/ol&gt;
+      &lt;/li&gt;
+      &lt;li&gt;Is Science value-free?&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;</content><author><name>Nathan Zorndorf</name></author><summary type="html">Notes on Philosophy of Science</summary></entry><entry><title type="html">Practice Problems: Paired &amp;amp; Unpaired t-test, Power, Sample Size</title><link href="http://localhost:4000/chapter-8-practice-problems/" rel="alternate" type="text/html" title="Practice Problems: Paired &amp; Unpaired t-test, Power, Sample Size" /><published>2020-10-14T00:00:00-07:00</published><updated>2020-10-14T00:00:00-07:00</updated><id>http://localhost:4000/chapter-8-practice-problems</id><content type="html" xml:base="http://localhost:4000/chapter-8-practice-problems/">&lt;!--more--&gt;
 &lt;p&gt;&amp;lt;!DOCTYPE html&amp;gt;&lt;/p&gt;
 &lt;html&gt;
 &lt;head&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;
@@ -15267,7 +15439,7 @@ power= 0.0013432628940264794
 
 
 
-&lt;/html&gt;</content><author><name>Nathan Zorndorf</name></author><category term="T-Test" /><category term="Python" /><category term="Statistical Inference" /><summary type="html"></summary></entry><entry><title type="html">Theory &amp;amp; Examples: Two Sample t-Tests and Confidence Intervals</title><link href="http://localhost:4000/statistics/two-sample-t-tests-and-confidence-intervals/" rel="alternate" type="text/html" title="Theory &amp; Examples: Two Sample t-Tests and Confidence Intervals" /><published>2020-10-14T00:00:00-07:00</published><updated>2020-10-14T00:00:00-07:00</updated><id>http://localhost:4000/statistics/two-sample-t-tests-and-confidence-intervals</id><content type="html" xml:base="http://localhost:4000/statistics/two-sample-t-tests-and-confidence-intervals/">&lt;!--more--&gt;
+&lt;/html&gt;</content><author><name>Nathan Zorndorf</name></author><summary type="html"></summary></entry><entry><title type="html">Theory &amp;amp; Examples: Two Sample t-Tests and Confidence Intervals</title><link href="http://localhost:4000/two-sample-t-tests-and-confidence-intervals/" rel="alternate" type="text/html" title="Theory &amp; Examples: Two Sample t-Tests and Confidence Intervals" /><published>2020-10-14T00:00:00-07:00</published><updated>2020-10-14T00:00:00-07:00</updated><id>http://localhost:4000/two-sample-t-tests-and-confidence-intervals</id><content type="html" xml:base="http://localhost:4000/two-sample-t-tests-and-confidence-intervals/">&lt;!--more--&gt;
 &lt;p&gt;&amp;lt;!DOCTYPE html&amp;gt;&lt;/p&gt;
 &lt;html&gt;
 &lt;head&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;
@@ -30256,7 +30428,7 @@ $$s = \sqrt{ \frac{\left(n_{1}-1\right) s_{1}^{2}+\left(n_{2}-1\right) s_{2}^{2}
 
 
 
-&lt;/html&gt;</content><author><name>Nathan Zorndorf</name></author><category term="T-Test" /><category term="Python" /><category term="Statistical Inference" /><summary type="html"></summary></entry><entry><title type="html">Example: Performing One Sample Z-Tests and t-Tests in Python</title><link href="http://localhost:4000/statistics/one-sample-z-test-and-t-test/" rel="alternate" type="text/html" title="Example: Performing One Sample Z-Tests and t-Tests in Python" /><published>2020-09-30T00:00:00-07:00</published><updated>2020-09-30T00:00:00-07:00</updated><id>http://localhost:4000/statistics/one-sample-z-test-and-t-test</id><content type="html" xml:base="http://localhost:4000/statistics/one-sample-z-test-and-t-test/">&lt;!--more--&gt;
+&lt;/html&gt;</content><author><name>Nathan Zorndorf</name></author><summary type="html"></summary></entry><entry><title type="html">Example: Performing One Sample Z-Tests and t-Tests in Python</title><link href="http://localhost:4000/one-sample-z-test-and-t-test/" rel="alternate" type="text/html" title="Example: Performing One Sample Z-Tests and t-Tests in Python" /><published>2020-09-30T00:00:00-07:00</published><updated>2020-09-30T00:00:00-07:00</updated><id>http://localhost:4000/one-sample-z-test-and-t-test</id><content type="html" xml:base="http://localhost:4000/one-sample-z-test-and-t-test/">&lt;!--more--&gt;
 &lt;html&gt;
 &lt;head&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;
 &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; /&gt;
@@ -45399,7 +45571,7 @@ pvalue=1.566173764815852e-06
 
 
 
-&lt;/html&gt;</content><author><name>Nathan Zorndorf</name></author><category term="Z-Test" /><category term="T-Test" /><category term="Python" /><category term="Statistical Inference" /><summary type="html"></summary></entry><entry><title type="html">Example: Performing a Chi-Square Goodness-of-Fit Test in Python</title><link href="http://localhost:4000/statistics/goodness-of-fit/" rel="alternate" type="text/html" title="Example: Performing a Chi-Square Goodness-of-Fit Test in Python" /><published>2020-09-23T00:00:00-07:00</published><updated>2020-09-23T00:00:00-07:00</updated><id>http://localhost:4000/statistics/goodness-of-fit</id><content type="html" xml:base="http://localhost:4000/statistics/goodness-of-fit/">&lt;!--more--&gt;
+&lt;/html&gt;</content><author><name>Nathan Zorndorf</name></author><summary type="html"></summary></entry><entry><title type="html">Example: Performing a Chi-Square Goodness-of-Fit Test in Python</title><link href="http://localhost:4000/goodness-of-fit/" rel="alternate" type="text/html" title="Example: Performing a Chi-Square Goodness-of-Fit Test in Python" /><published>2020-09-23T00:00:00-07:00</published><updated>2020-09-23T00:00:00-07:00</updated><id>http://localhost:4000/goodness-of-fit</id><content type="html" xml:base="http://localhost:4000/goodness-of-fit/">&lt;!--more--&gt;
 &lt;html&gt;
 &lt;head&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;
 &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; /&gt;
@@ -60154,4 +60326,4 @@ a.anchor-link {
 
 
 
-&lt;/html&gt;</content><author><name>Nathan Zorndorf</name></author><category term="Chi-square" /><category term="Python" /><category term="Example" /><summary type="html"></summary></entry></feed>
+&lt;/html&gt;</content><author><name>Nathan Zorndorf</name></author><summary type="html"></summary></entry></feed>

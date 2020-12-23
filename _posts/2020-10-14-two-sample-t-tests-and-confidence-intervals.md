@@ -2,13 +2,6 @@
 title: "Theory & Examples: Two Sample t-Tests and Confidence Intervals"
 layout: "notebook"
 excerpt_separator: "<!--more-->"
-categories:
-  # - Blog
-  - Statistics
-tags:
-  - T-Test
-  - Python
-  - Statistical Inference
 ---
 
 <!--more-->
