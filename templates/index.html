@@ -1,9 +1,5 @@
 {% extends "layout.html" %}
 
-{% block title %}
-    Index
-{% endblock %}
-
 {% block main %}
 
     <section class="home-content">
@@ -12,16 +8,13 @@
                 <div class="col-12 col-md-5">
                     <div class="row justify-content-center">
                         <div class="text-center">
-                            {% if lang == 'en' %}
-                                <h2 class="index-header">My latest project</h2>
-                            {% else %}
-                                <h2 class="index-header">Mein neuestes Projekt</h2>
-                            {% endif %}
+                            <h2 class="index-header">My latest project</h2>
                         </div>
                     </div>
                     <div class="row justify-content-center">
                         <div class="row index-img text-center">
-                            <h6>How to Build a Data Science Portfolio Website</h6>
+                            <h6>{{ latest_project_name }}</h6>
+                            <!-- <h6>How to Build a Data Science Portfolio Website</h6> -->
                         </div>
                     </div>
                     <div class="row">
@@ -31,11 +24,7 @@
                     </div>
                     <div class="index-bottom text-center">
                         <p>
-                            {% if lang == 'en' %}
-                                <a class="about-link" href="/en/portfolio">This way</a> to see more of my projects.
-                            {% else %}
-                                <a class="about-link" href="/de/portfolio">Hier</a> geht's lang zu meinen anderen Projekten.
-                            {% endif %}
+                            <a class="about-link" href="/portfolio">This way</a> to see more of my projects.
                         </p>
                     </div>
                 </div>
@@ -43,19 +32,13 @@
                 <div class="col-12 col-md-5">
                     <div class="row justify-content-center">
                         <div class="text-center">
-                            {% if lang == 'en' %}
-                                <!-- <h2 class="index-header">My most recent course</h2> -->
-                                <h2 class="index-header">My latest blog post</h2>
-                            {% else %}
-                                <!-- <h2 class="index-header">Mein zuletzt belegter Kurs</h2> -->
-                                <h2 class="index-header">Mein neuester Blog Post</h2>
-                            {% endif %}
+                            <h2 class="index-header">My latest blog post</h2>
                         </div>
                     </div>
                     <div class="row justify-content-center">
                         <div class="row index-img text-center">
                             <!-- <h6>Udacity's Intro to Data Structures and Algorithms</h6> -->
-                            <h6>Data Science for Sustainability</h6>
+                            <h6>{{ latest_blog_post_name }}</h6>
                         </div>
                     </div>
                     <div class="row">
@@ -68,11 +51,7 @@
                     </div>
                     <div class="index-bottom text-center">
                         <p>
-                            {% if lang == 'en' %}
-                                And <a target="_blank" class="about-link" href="https://medium.com/@julia.nikulski">this way</a> to see more of my blog posts.
-                            {% else %}
-                                Und <a target="_blank" class="about-link" href="https://medium.com/@julia.nikulski">hier</a> zu meinen anderen Blog Posts.
-                            {% endif %}
+                            <a target="_blank" class="about-link" href="https://medium.com/@nathanzorndorf">this way</a> to see more of my blog posts.
                         </p>
                     </div>
                 </div>
