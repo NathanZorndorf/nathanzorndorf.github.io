@@ -15,10 +15,13 @@ def index():
 
     title_text = helper.get_title_content('index')
 
+    projects = helper.get_portfolio_content()
+    project = projects[0] # get latest project
+
     return render_template('index.html',
                                 title_text=title_text,
-                                latest_project_name='cool project i did about dogs!',
-                                latest_blog_post_name='cool blog post I made about poop!',
+                                project=project,
+                                latest_blog_post_name='cool blog post I made!',
                                 title="DATA SCIENCE & HEALTH",
                                 id="index",
                                 lang='en')

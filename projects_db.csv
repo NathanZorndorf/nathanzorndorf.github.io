@@ -1,2 +1,2 @@
-title,description,skills,blog_link,github_link,image_name
-"Camera Price Prediction on Ebay","Helping Ebay users make smarter decisions with machine learning","Python, Machine Learning, Scikit-learn, regression models",https://nathanzorndorf.medium.com/helping-ebay-users-make-smarter-decisions-with-machine-learning-c2c8156667a6,https://github.com/NathanZorndorf/ebay-price-predictor,ebay-price-predictor.png
+date,title,description,skills,blog_url,github_url,image_name
+02-11-2021,"Camera Price Prediction on Ebay","Helping Ebay users make smarter decisions with machine learning","Python, Machine Learning, Scikit-learn, regression models",https://nathanzorndorf.medium.com/helping-ebay-users-make-smarter-decisions-with-machine-learning-c2c8156667a6,https://github.com/NathanZorndorf/ebay-price-predictor,ebay-price-predictor.png

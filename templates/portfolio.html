@@ -17,7 +17,7 @@
 
                     <!-- title, description, skills go here -->
                     <div class="text-center">
-                        <a class="title-link" target="_blank" href="{{ project['blog_link'] }}"><h5>{{ project['title'] }}</h5></a>
+                        <a class="title-link" target="_blank" href="{{ project['blog_url'] }}"><h5>{{ project['title'] }}</h5></a>
                         <p class="project-des">
                             {{ project['description'] }}
                         </p>
@@ -28,7 +28,7 @@
 
                     <!-- image goes here -->
                     <div class="row">
-                        <a target="_blank" href="{{ project['blog_link'] }}">
+                        <a target="_blank" href="{{ project['blog_url'] }}">
                             <img class="portfolio-img" src="/static/img/{{project['image_name']}}">
                         </a>
                     </div>
@@ -36,10 +36,10 @@
                     <!-- code/blog link buttons go here -->
                     <div class="row">
                         <div class="col-6 text-center">
-                            <a target="_blank" href="{{ project['blog_link'] }}" class="button btn portfolio-btn rounded-0">Blog post</a>
+                            <a target="_blank" href="{{ project['blog_url'] }}" class="button btn portfolio-btn rounded-0">Blog post</a>
                         </div>
                         <div class="col-6 text-center">
-                            <a target="_blank" href="{{ project['github_link'] }}" class="button btn portfolio-btn rounded-0">Code</a>
+                            <a target="_blank" href="{{ project['github_url'] }}" class="button btn portfolio-btn rounded-0">Code</a>
                         </div>
                     </div>
 
