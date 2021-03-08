@@ -51,6 +51,7 @@
 
     <body>
 
+        <!-- nav bar -->
         <nav class="navbar navbar-expand-md navbar-light bg-light border sticky-top">
             <a class="navbar-brand" id="{{ id }}-navbarbrand" href="/">Nathan Zorndorf</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,27 +86,13 @@
             </div>
         </nav>
 
+        <!-- main section of page -->
         <main class="container p-0">
-            <section class="title-color" id="{{ id }}-title">
-                <div class="title-container">
-                    <div class="row title-text">
-                        <div class="col-12 col-sm-9 col-md-7 col-lg-6 additional-margin">
-                            <div class="title-description">
-                                <p>{{title_text}}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row title-text">
-                        <div class="col-auto additional-margin">
-                            <p>{{title}}</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
+            {% block title %}{% endblock %}
             {% block main %}{% endblock %}
         </main>
 
+        <!-- footer -->
         <footer class="small text-center text-muted">
             <a href="/legal" class="text-dark">Legal Notice</a> |
             <a href="/privacy" class="text-dark">Privacy</a>
