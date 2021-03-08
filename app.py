@@ -15,13 +15,14 @@ def index():
 
     title_text = helper.get_title_content('index')
 
-    projects = helper.get_portfolio_content()
-    project = projects[0] # get latest project
+    project = helper.get_portfolio_content()[0] # get latest project
+
+    post = helper.get_blog_posts()[0]
 
     return render_template('index.html',
                                 title_text=title_text,
                                 project=project,
-                                latest_blog_post_name='cool blog post I made!',
+                                post=post,
                                 title="DATA SCIENCE & HEALTH",
                                 id="index",
                                 lang='en')
@@ -41,6 +42,23 @@ def portfolio():
                             title="PROJECT PORTFOLIO",
                             id="portfolio",
                             projects=projects,
+                            lang='en')
+
+@app.route('/blog', methods=['POST', 'GET'])
+def blog():
+
+    # get all projects from the database
+    # posts = helper.get_portfolio_content()
+    posts = helper.get_blog_posts()
+
+    # get the title content for the portfolio page
+    title_text = helper.get_title_content('blog')
+
+    return render_template('blog.html',
+                            title_text=title_text,
+                            title="STATISTICS & OTHER MUSINGS",
+                            id="portfolio",
+                            projects=posts,
                             lang='en')
 
 if __name__ == '__main__':

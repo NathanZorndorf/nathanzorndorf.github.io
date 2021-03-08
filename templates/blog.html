@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    <section class="title-color" id="{{ id }}-title">
+        <div class="title-container">
+            <div class="row title-text">
+                <div class="col-12 col-sm-9 col-md-7 col-lg-6 additional-margin">
+                    <div class="title-description">
+                        <p>{{title_text}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row title-text">
+                <div class="col-auto additional-margin">
+                    <p>{{title}}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block main %}
+
+    <section class="home-content">
+
+        <div class="container p-0">
+
+            {% for project in projects %}
+            <div class="row portfolio-row justify-content-center">
+                
+                <div class="col-12 col-md-5">
+
+                    <!-- title, description, skills go here -->
+                    <div class="text-center">
+                        <a class="title-link" target="_blank" href="{{ project['link'] }}"><h5>{{ project['title'] }}</h5></a>
+                        <p class="project-des">
+                            {{ project['description'] }}
+                        </p>
+                        <p class="skills">
+                            <span class="bold">Keywords:</span> {{ project['keywords'] }}
+                        </p>
+                    </div>
+
+                    <!-- image goes here -->
+                    <div class="row">
+                        <a target="_blank" href="{{ project['link'] }}">
+                            <img class="portfolio-img" src="/static/img/{{project['image_name']}}">
+                        </a>
+                    </div>
+                    
+                    <!-- code/blog link buttons go here -->
+                    <div class="row">
+                        <div class="col text-center">
+                            <a target="_blank" href="{{ project['html_url'] }}" class="button btn portfolio-btn rounded-0">HTML</a>
+                        </div>
+                        <!-- <div class="col text-center">
+                            <a target="_blank" href="{{ project['github_url'] }}" class="button btn portfolio-btn rounded-0">Github</a>
+                        </div> -->
+                        <div class="col text-center">
+                            <a target="_blank" href="{{ project['colab_url'] }}" class="button btn portfolio-btn rounded-0">Interactive Notebook</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+    </section>
+
+{% endblock %}

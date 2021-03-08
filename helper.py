@@ -75,8 +75,10 @@ def get_title_content(page):
         '''
     elif page == 'portfolio':
         title_text = 'portfolio'
-    elif page == 'about':
-        title_text = 'about'
+    elif page == 'blog':
+        title_text = '''
+        Hi! You've made it to my statistics & other musings blog!
+        '''
 
     return title_text
 
@@ -89,9 +91,22 @@ def get_portfolio_content():
     '''
 
     projects_db = pd.read_csv('projects_db.csv', header=0)
-    projects_db['date'] = pd.to_datetime(projects_db['date']).dt.date
-    projects_db = projects_db.sort_values(by='date', ascending=False) # latest first
+    projects_db['date_published'] = pd.to_datetime(projects_db['date_published']).dt.date
+    projects_db = projects_db.sort_values(by='date_published', ascending=False) # latest first
     projects = projects_db.to_dict(orient='records')
+    return projects 
+    
+def get_blog_posts():
+    '''
+    Function to get the portfolio projects from the database
+    Args: lang = str; specifies language selected by user
+    Returns: projects = list; list of dictionaries containing project metadata.
+    '''
+
+    posts_db = pd.read_csv('posts_db.csv', header=0)
+    posts_db['date_published'] = pd.to_datetime(posts_db['date_published']).dt.date
+    posts_db = posts_db.sort_values(by='date_published', ascending=False) # latest first
+    projects = posts_db.to_dict(orient='records')
     return projects 
     
 
