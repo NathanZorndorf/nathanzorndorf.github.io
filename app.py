@@ -61,7 +61,7 @@ def blog():
 
     return render_template('blog.html',
                             title_text=title_text,
-                            title="STATISTICS & OTHER MUSINGS",
+                            title="Statistics (& Other Musings)",
                             id="portfolio",
                             projects=posts,
                             lang='en')
