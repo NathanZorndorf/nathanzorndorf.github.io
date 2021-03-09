@@ -1,4 +1,7 @@
-
-<div class="container">
-    <h1>{{ project['title'] }}</h1>
-</div>
+{% if project['app_url'] != "" %}
+    value of project['app_url']: {{ project['app_url'] }}
+{% elif project['app_url'] == "" %}
+    project['app_url'] == ""
+{% else %}
+    something else
+{% endif %}

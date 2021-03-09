@@ -8,6 +8,11 @@ import helper
 # Configure application
 app = Flask(__name__)
 
+@app.route('/test', methods=['POST', 'GET'])
+def test():
+    project = helper.get_portfolio_content()[1]
+    return render_template('test.html', project=project)
+    
 
 @app.route('/index', methods=['POST', 'GET'])
 @app.route('/', methods=['POST', 'GET'])

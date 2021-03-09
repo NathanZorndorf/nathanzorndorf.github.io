@@ -93,6 +93,7 @@ def get_portfolio_content():
     projects_db = pd.read_csv('projects_db.csv', header=0)
     projects_db['date_published'] = pd.to_datetime(projects_db['date_published']).dt.date
     projects_db = projects_db.sort_values(by='date_published', ascending=False) # latest first
+    projects_db = projects_db.fillna('')
     projects = projects_db.to_dict(orient='records')
     return projects 
     
