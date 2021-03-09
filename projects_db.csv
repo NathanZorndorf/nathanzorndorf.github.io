@@ -1,3 +1,3 @@
 date_published,title,description,skills,app_url,blog_url,github_url,image_name
 04-27-2017,"Camera Price Prediction on Ebay","Helping Ebay users make smarter decisions with machine learning","Python, Machine Learning, Scikit-learn, regression models",,https://nathanzorndorf.medium.com/helping-ebay-users-make-smarter-decisions-with-machine-learning-c2c8156667a6,https://github.com/NathanZorndorf/ebay-price-predictor,ebay-price-predictor.png
-02-11-2021,"Food Classifier App","Classifies pictures of food into various categories.","Image Recognition, Google Cloud Services, Python, AI",https://food-classifier-app-p6odrwu75a-uw.a.run.app,,,confusion-matrix.png
+02-11-2021,"Food Classifier App","Classifies pictures of food into various categories.","Deep Learning, Google Cloud Services, Python",https://food-classifier-app-p6odrwu75a-uw.a.run.app,,,confusion-matrix.png
