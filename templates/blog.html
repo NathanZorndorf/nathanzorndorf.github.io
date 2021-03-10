@@ -34,50 +34,130 @@
 
         <div class="container p-0">
 
-            {% for project in projects %}
-            <div class="row portfolio-row justify-content-center">
-                
-                <div class="col-12 col-md-5">
+            {% set num_projects = projects|length %}
+            {% set num_rows = num_projects / 2 %}
 
-                    <!-- title, description, skills go here -->
-                    <div class="text-center">
-                        <a class="title-link" target="_blank" href="{{ project['link'] }}"><h5>{{ project['title'] }}</h5></a>
-                        <p class="project-des">
-                            {{ project['description'] }}
-                        </p>
-                        <p class="skills">
-                            <span class="bold">Keywords:</span> {{ project['keywords'] }}
-                        </p>
-                    </div>
-
-                    <!-- image goes here -->
-                    <div class="row">
-                        <a target="_blank" href="{{ project['link'] }}">
-                            <img class="portfolio-img" src="/static/img/{{project['image_name']}}">
-                        </a>
-                    </div>
-                    
-                    <!-- code/blog link buttons go here -->
-                    <div class="row">
-                        {% if project['html_url'] != "" %}
-                        <div class="col text-center">
-                            <a target="_blank" href="{{ project['html_url'] }}" class="button btn portfolio-btn rounded-0">HTML</a>
+            {% for i in range(num_rows|round(1, 'floor')|int) %}
+                {% set project_1 = projects[i*2] %}
+                {% set project_2 = projects[i*2+1] %}
+                <div class="row portfolio-row justify-content-center">
+                    <div class="col-12 col-md-5">
+                        <!-- title, description, skills go here -->
+                        <div class="text-center">
+                            <a class="title-link" target="_blank" href="{{ project_1['link'] }}"><h5>{{ project_1['title'] }}</h5></a>
+                            <p class="project-des">
+                                {{ project_1['description'] }}
+                            </p>
+                            <p class="skills">
+                                <span class="bold">Keywords:</span> {{ project_1['keywords'] }}
+                            </p>
                         </div>
-                        {% endif %}
-                        <!-- <div class="col text-center">
-                            <a target="_blank" href="{{ project['github_url'] }}" class="button btn portfolio-btn rounded-0">Github</a>
-                        </div> -->
-                        {% if project['colab_url'] != "" %}
-                        <div class="col text-center">
-                            <a target="_blank" href="{{ project['colab_url'] }}" class="button btn portfolio-btn rounded-0">Interactive Notebook</a>
-                        </div>
-                        {% endif %}
-                    </div>
 
+                        <!-- image goes here -->
+                        <div class="row">
+                            <a target="_blank" href="{{ project_1['link'] }}">
+                                <img class="portfolio-img" src="/static/img/{{project_1['image_name']}}">
+                            </a>
+                        </div>
+                        
+                        <!-- code/blog link buttons go here -->
+                        <div class="row">
+                            {% if project_1['html_url'] != "" %}
+                            <div class="col text-center">
+                                <a target="_blank" href="{{ project_1['html_url'] }}" class="button btn portfolio-btn rounded-0">HTML</a>
+                            </div>
+                            {% endif %}
+                            <!-- <div class="col text-center">
+                                <a target="_blank" href="{{ project_1['github_url'] }}" class="button btn portfolio-btn rounded-0">Github</a>
+                            </div> -->
+                            {% if project_1['colab_url'] != "" %}
+                            <div class="col text-center">
+                                <a target="_blank" href="{{ project_1['colab_url'] }}" class="button btn portfolio-btn rounded-0">Interactive Notebook</a>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                    <div class="col-12 col-md-5">
+                        <!-- title, description, skills go here -->
+                        <div class="text-center">
+                            <a class="title-link" target="_blank" href="{{ project_2['link'] }}"><h5>{{ project_2['title'] }}</h5></a>
+                            <p class="project-des">
+                                {{ project_2['description'] }}
+                            </p>
+                            <p class="skills">
+                                <span class="bold">Keywords:</span> {{ project_2['keywords'] }}
+                            </p>
+                        </div>
+
+                        <!-- image goes here -->
+                        <div class="row">
+                            <a target="_blank" href="{{ project_2['link'] }}">
+                                <img class="portfolio-img" src="/static/img/{{project_2['image_name']}}">
+                            </a>
+                        </div>
+                        
+                        <!-- code/blog link buttons go here -->
+                        <div class="row">
+                            {% if project_2['html_url'] != "" %}
+                            <div class="col text-center">
+                                <a target="_blank" href="{{ project_2['html_url'] }}" class="button btn portfolio-btn rounded-0">HTML</a>
+                            </div>
+                            {% endif %}
+                            <!-- <div class="col text-center">
+                                <a target="_blank" href="{{ project_2['github_url'] }}" class="button btn portfolio-btn rounded-0">Github</a>
+                            </div> -->
+                            {% if project_2['colab_url'] != "" %}
+                            <div class="col text-center">
+                                <a target="_blank" href="{{ project_1['colab_url'] }}" class="button btn portfolio-btn rounded-0">Interactive Notebook</a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
-            </div>
             {% endfor %}
+            
+            {% if num_projects % 2 != 0 %}
+                {% set project_1 = projects[-1] %}
+                <div class="row portfolio-row justify-content-center">
+                    <div class="col-12 col-md-5">
+                        <!-- title, description, skills go here -->
+                        <div class="text-center">
+                            <a class="title-link" target="_blank" href="{{ project_1['link'] }}"><h5>{{ project_1['title'] }}</h5></a>
+                            <p class="project-des">
+                                {{ project_1['description'] }}
+                            </p>
+                            <p class="skills">
+                                <span class="bold">Keywords:</span> {{ project_1['keywords'] }}
+                            </p>
+                        </div>
 
+                        <!-- image goes here -->
+                        <div class="row">
+                            <a target="_blank" href="{{ project_1['link'] }}">
+                                <img class="portfolio-img" src="/static/img/{{project_1['image_name']}}">
+                            </a>
+                        </div>
+                        
+                        <!-- code/blog link buttons go here -->
+                        <div class="row">
+                            {% if project_1['html_url'] != "" %}
+                            <div class="col text-center">
+                                <a target="_blank" href="{{ project_1['html_url'] }}" class="button btn portfolio-btn rounded-0">HTML</a>
+                            </div>
+                            {% endif %}
+                            <!-- <div class="col text-center">
+                                <a target="_blank" href="{{ project_1['github_url'] }}" class="button btn portfolio-btn rounded-0">Github</a>
+                            </div> -->
+                            {% if project_1['colab_url'] != "" %}
+                            <div class="col text-center">
+                                <a target="_blank" href="{{ project_1['colab_url'] }}" class="button btn portfolio-btn rounded-0">Interactive Notebook</a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </section>
 

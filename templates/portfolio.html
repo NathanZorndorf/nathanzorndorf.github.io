@@ -28,53 +28,137 @@
     <section class="home-content">
 
         <div class="container p-0">
+            {% set num_projects = projects|length %}
+            {% set num_rows = num_projects / 2 %}
 
-            {% for project in projects %}
-            <div class="row portfolio-row justify-content-center">
-                
-                <div class="col-12 col-md-5">
+            {% for i in range(num_rows|round(1, 'floor')|int) %}
+                {% set project_1 = projects[i*2] %}
+                {% set project_2 = projects[i*2+1] %}
+                <div class="row portfolio-row justify-content-center">
+                    <div class="col-12 col-md-5">
+                        <!-- title, description, skills go here -->
+                        <div class="text-center">
+                            <a class="title-link" target="_blank" href="{{ project_1['blog_url'] }}"><h5>{{ project_1['title'] }}</h5></a>
+                            <p class="project-des">
+                                {{ project_1['description'] }}
+                            </p>
+                            <p class="skills">
+                                <span class="bold">Skills:</span> {{ project_1['skills'] }}
+                            </p>
+                        </div>
 
-                    <!-- title, description, skills go here -->
-                    <div class="text-center">
-                        <a class="title-link" target="_blank" href="{{ project['blog_url'] }}"><h5>{{ project['title'] }}</h5></a>
-                        <p class="project-des">
-                            {{ project['description'] }}
-                        </p>
-                        <p class="skills">
-                            <span class="bold">Skills:</span> {{ project['skills'] }}
-                        </p>
+                        <!-- image goes here -->
+                        <div class="row">
+                            <a target="_blank" href="{{ project_1['blog_url'] }}">
+                                <img class="portfolio-img" src="/static/img/{{project_1['image_name']}}">
+                            </a>
+                        </div>
+                        
+                        <!-- code/blog link buttons go here -->
+                        <div class="row">
+                            {% if project_1['app_url'] != "" %}
+                            <div class="col text-center">
+                                <a target="_blank" href="{{ project_1['app_url'] }}" class="button btn portfolio-btn rounded-0">Open app</a>
+                            </div>
+                            {% endif %}
+                            {% if project_1['blog_url'] != "" %}
+                            <div class="col text-center">
+                                <a target="_blank" href="{{ project_1['blog_url'] }}" class="button btn portfolio-btn rounded-0">Blog post</a>
+                            </div>
+                            {% endif %}
+                            {% if project_1['github_url'] != "" %}
+                            <div class="col text-center">
+                                <a target="_blank" href="{{ project_1['github_url'] }}" class="button btn portfolio-btn rounded-0">Code</a>
+                            </div>
+                            {% endif %}
+                        </div>
                     </div>
 
-                    <!-- image goes here -->
-                    <div class="row">
-                        <a target="_blank" href="{{ project['blog_url'] }}">
-                            <img class="portfolio-img" src="/static/img/{{project['image_name']}}">
-                        </a>
-                    </div>
-                    
-                    <!-- code/blog link buttons go here -->
-                    <div class="row">
-                        {% if project['app_url'] != "" %}
-                        <div class="col text-center">
-                            <a target="_blank" href="{{ project['app_url'] }}" class="button btn portfolio-btn rounded-0">Open app</a>
+                    <div class="col-12 col-md-5">
+                        <!-- title, description, skills go here -->
+                        <div class="text-center">
+                            <a class="title-link" target="_blank" href="{{ project_2['blog_url'] }}"><h5>{{ project_2['title'] }}</h5></a>
+                            <p class="project-des">
+                                {{ project_2['description'] }}
+                            </p>
+                            <p class="skills">
+                                <span class="bold">Skills:</span> {{ project_2['skills'] }}
+                            </p>
                         </div>
-                        {% endif %}
-                        {% if project['blog_url'] != "" %}
-                        <div class="col text-center">
-                            <a target="_blank" href="{{ project['blog_url'] }}" class="button btn portfolio-btn rounded-0">Blog post</a>
-                        </div>
-                        {% endif %}
-                        {% if project['github_url'] != "" %}
-                        <div class="col text-center">
-                            <a target="_blank" href="{{ project['github_url'] }}" class="button btn portfolio-btn rounded-0">Code</a>
-                        </div>
-                        {% endif %}
-                    </div>
 
+                        <!-- image goes here -->
+                        <div class="row">
+                            <a target="_blank" href="{{ project_2['blog_url'] }}">
+                                <img class="portfolio-img" src="/static/img/{{project_2['image_name']}}">
+                            </a>
+                        </div>
+                        
+                        <!-- code/blog link buttons go here -->
+                        <div class="row">
+                            {% if project_2['app_url'] != "" %}
+                            <div class="col text-center">
+                                <a target="_blank" href="{{ project_2['app_url'] }}" class="button btn portfolio-btn rounded-0">Open app</a>
+                            </div>
+                            {% endif %}
+                            {% if project_2['blog_url'] != "" %}
+                            <div class="col text-center">
+                                <a target="_blank" href="{{ project_2['blog_url'] }}" class="button btn portfolio-btn rounded-0">Blog post</a>
+                            </div>
+                            {% endif %}
+                            {% if project_2['github_url'] != "" %}
+                            <div class="col text-center">
+                                <a target="_blank" href="{{ project_2['github_url'] }}" class="button btn portfolio-btn rounded-0">Code</a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
-            </div>
             {% endfor %}
+            <!-- if we have an odd number of projects, 
+                include an extra row with a single column for the last project -->
+            {% if num_projects % 2 != 0 %}
+                {% set project_1 = projects[-1] %}
+                <div class="row portfolio-row justify-content-center">
+                    <div class="col-12 col-md-5">
+                        <!-- title, description, skills go here -->
+                        <div class="text-center">
+                            <a class="title-link" target="_blank" href="{{ project_1['blog_url'] }}"><h5>{{ project_1['title'] }}</h5></a>
+                            <p class="project-des">
+                                {{ project_1['description'] }}
+                            </p>
+                            <p class="skills">
+                                <span class="bold">Skills:</span> {{ project_1['skills'] }}
+                            </p>
+                        </div>
 
+                        <!-- image goes here -->
+                        <div class="row">
+                            <a target="_blank" href="{{ project_1['blog_url'] }}">
+                                <img class="portfolio-img" src="/static/img/{{project_1['image_name']}}">
+                            </a>
+                        </div>
+                        
+                        <!-- code/blog link buttons go here -->
+                        <div class="row">
+                            {% if project_1['app_url'] != "" %}
+                            <div class="col text-center">
+                                <a target="_blank" href="{{ project_1['app_url'] }}" class="button btn portfolio-btn rounded-0">Open app</a>
+                            </div>
+                            {% endif %}
+                            {% if project_1['blog_url'] != "" %}
+                            <div class="col text-center">
+                                <a target="_blank" href="{{ project_1['blog_url'] }}" class="button btn portfolio-btn rounded-0">Blog post</a>
+                            </div>
+                            {% endif %}
+                            {% if project_1['github_url'] != "" %}
+                            <div class="col text-center">
+                                <a target="_blank" href="{{ project_1['github_url'] }}" class="button btn portfolio-btn rounded-0">Code</a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </section>
 
