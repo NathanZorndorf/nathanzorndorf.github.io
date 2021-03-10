@@ -107,8 +107,9 @@ def get_blog_posts():
     posts_db = pd.read_csv('posts_db.csv', header=0)
     posts_db['date_published'] = pd.to_datetime(posts_db['date_published']).dt.date
     posts_db = posts_db.sort_values(by='date_published', ascending=False) # latest first
-    projects = posts_db.to_dict(orient='records')
-    return projects 
+    posts_db = posts_db.fillna('')
+    posts = posts_db.to_dict(orient='records')
+    return posts
     
 
 def get_skill_content(lang):

@@ -59,15 +59,19 @@
                     
                     <!-- code/blog link buttons go here -->
                     <div class="row">
+                        {% if project['html_url'] != "" %}
                         <div class="col text-center">
                             <a target="_blank" href="{{ project['html_url'] }}" class="button btn portfolio-btn rounded-0">HTML</a>
                         </div>
+                        {% endif %}
                         <!-- <div class="col text-center">
                             <a target="_blank" href="{{ project['github_url'] }}" class="button btn portfolio-btn rounded-0">Github</a>
                         </div> -->
+                        {% if project['colab_url'] != "" %}
                         <div class="col text-center">
                             <a target="_blank" href="{{ project['colab_url'] }}" class="button btn portfolio-btn rounded-0">Interactive Notebook</a>
                         </div>
+                        {% endif %}
                     </div>
 
                 </div>
