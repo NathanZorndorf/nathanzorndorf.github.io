@@ -8,27 +8,25 @@ import helper
 # Configure application
 app = Flask(__name__)
 
-@app.route('/test', methods=['POST', 'GET'])
-def test():
-    project = helper.get_portfolio_content()[1]
-    return render_template('test.html', project=project)
+# @app.route('/test', methods=['POST', 'GET'])
+# def test():
+#     project = helper.get_portfolio_content()[1]
+#     return render_template('test.html', project=project)
     
 
 @app.route('/index', methods=['POST', 'GET'])
 @app.route('/', methods=['POST', 'GET'])
 def index():
 
-    title_text = helper.get_title_content('index')
+    # title_text = helper.get_title_content('index')
 
     project = helper.get_portfolio_content()[0] # get latest project
 
     post = helper.get_blog_posts()[0]
 
     return render_template('index.html',
-                                title_text=title_text,
                                 project=project,
                                 post=post,
-                                title="DATA SCIENCE & HEALTH",
                                 id="index",
                                 lang='en')
 
