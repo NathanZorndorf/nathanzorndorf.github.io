@@ -44,7 +44,7 @@
                     <div class="col-12 col-md-5">
                         <!-- title, description, skills go here -->
                         <div class="text-center">
-                            <a class="title-link" target="_blank" href="{{ project_1['link'] }}"><h5>{{ project_1['title'] }}</h5></a>
+                            <a class="title-link" target="_blank" href="{{ project_1['blog_url'] }}"><h5>{{ project_1['title'] }}</h5></a>
                             <p class="project-des">
                                 {{ project_1['description'] }}
                             </p>
@@ -55,16 +55,16 @@
 
                         <!-- image goes here -->
                         <div class="row">
-                            <a target="_blank" href="{{ project_1['link'] }}">
+                            <a target="_blank" href="{{ project_1['blog_url'] }}">
                                 <img class="portfolio-img" src="/static/img/{{project_1['image_name']}}">
                             </a>
                         </div>
                         
                         <!-- code/blog link buttons go here -->
                         <div class="row">
-                            {% if project_1['html_url'] != "" %}
+                            {% if project_1['blog_url'] != "" %}
                             <div class="col text-center">
-                                <a target="_blank" href="{{ project_1['html_url'] }}" class="button btn portfolio-btn rounded-0">HTML</a>
+                                <a target="_blank" href="{{ project_1['blog_url'] }}" class="button btn portfolio-btn rounded-0">Blog Post</a>
                             </div>
                             {% endif %}
                             <!-- <div class="col text-center">
@@ -81,7 +81,7 @@
                     <div class="col-12 col-md-5">
                         <!-- title, description, skills go here -->
                         <div class="text-center">
-                            <a class="title-link" target="_blank" href="{{ project_2['link'] }}"><h5>{{ project_2['title'] }}</h5></a>
+                            <a class="title-link" target="_blank" href="{{ project_2['blog_url'] }}"><h5>{{ project_2['title'] }}</h5></a>
                             <p class="project-des">
                                 {{ project_2['description'] }}
                             </p>
@@ -92,16 +92,16 @@
 
                         <!-- image goes here -->
                         <div class="row">
-                            <a target="_blank" href="{{ project_2['link'] }}">
+                            <a target="_blank" href="{{ project_2['blog_url'] }}">
                                 <img class="portfolio-img" src="/static/img/{{project_2['image_name']}}">
                             </a>
                         </div>
                         
                         <!-- code/blog link buttons go here -->
                         <div class="row">
-                            {% if project_2['html_url'] != "" %}
+                            {% if project_2['blog_url'] != "" %}
                             <div class="col text-center">
-                                <a target="_blank" href="{{ project_2['html_url'] }}" class="button btn portfolio-btn rounded-0">HTML</a>
+                                <a target="_blank" href="{{ project_2['blog_url'] }}" class="button btn portfolio-btn rounded-0">Blog Post</a>
                             </div>
                             {% endif %}
                             <!-- <div class="col text-center">
@@ -123,7 +123,7 @@
                     <div class="col-12 col-md-5">
                         <!-- title, description, skills go here -->
                         <div class="text-center">
-                            <a class="title-link" target="_blank" href="{{ project_1['link'] }}"><h5>{{ project_1['title'] }}</h5></a>
+                            <a class="title-link" target="_blank" href="{{ project_1['blog_url'] }}"><h5>{{ project_1['title'] }}</h5></a>
                             <p class="project-des">
                                 {{ project_1['description'] }}
                             </p>
@@ -134,16 +134,16 @@
 
                         <!-- image goes here -->
                         <div class="row">
-                            <a target="_blank" href="{{ project_1['link'] }}">
+                            <a target="_blank" href="{{ project_1['blog_url'] }}">
                                 <img class="portfolio-img" src="/static/img/{{project_1['image_name']}}">
                             </a>
                         </div>
                         
                         <!-- code/blog link buttons go here -->
                         <div class="row">
-                            {% if project_1['html_url'] != "" %}
+                            {% if project_1['blog_url'] != "" %}
                             <div class="col text-center">
-                                <a target="_blank" href="{{ project_1['html_url'] }}" class="button btn portfolio-btn rounded-0">HTML</a>
+                                <a target="_blank" href="{{ project_1['blog_url'] }}" class="button btn portfolio-btn rounded-0">Blog Post</a>
                             </div>
                             {% endif %}
                             <!-- <div class="col text-center">
